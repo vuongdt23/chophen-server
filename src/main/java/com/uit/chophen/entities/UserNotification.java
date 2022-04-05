@@ -15,7 +15,7 @@ public class UserNotification implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="user_notification_id")
 	private int userNotificationId;
 
@@ -31,10 +31,10 @@ public class UserNotification implements Serializable {
 	@Column(name="user_notification_title")
 	private String userNotificationTitle;
 
-	//bi-directional many-to-one association to User
+	//bi-directional many-to-one association to UserProfile
 	@ManyToOne
 	@JoinColumn(name="user_id")
-	private User user;
+	private UserProfile userProfile;
 
 	public UserNotification() {
 	}
@@ -79,12 +79,12 @@ public class UserNotification implements Serializable {
 		this.userNotificationTitle = userNotificationTitle;
 	}
 
-	public User getUser() {
-		return this.user;
+	public UserProfile getUserProfile() {
+		return this.userProfile;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setUserProfile(UserProfile userProfile) {
+		this.userProfile = userProfile;
 	}
 
 }

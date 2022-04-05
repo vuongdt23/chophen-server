@@ -16,7 +16,7 @@ public class Listing implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="listing_id")
 	private int listingId;
 
@@ -53,10 +53,10 @@ public class Listing implements Serializable {
 	@JoinColumn(name="listing_status")
 	private ListingStatus listingStatusBean;
 
-	//bi-directional many-to-one association to User
+	//bi-directional many-to-one association to UserProfile
 	@ManyToOne
 	@JoinColumn(name="listing_poster")
-	private User user;
+	private UserProfile userProfile;
 
 	//bi-directional many-to-one association to UserSavedListing
 	@OneToMany(mappedBy="listing")
@@ -129,12 +129,12 @@ public class Listing implements Serializable {
 		this.listingStatusBean = listingStatusBean;
 	}
 
-	public User getUser() {
-		return this.user;
+	public UserProfile getUserProfile() {
+		return this.userProfile;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setUserProfile(UserProfile userProfile) {
+		this.userProfile = userProfile;
 	}
 
 	public List<UserSavedListing> getUserSavedListings() {

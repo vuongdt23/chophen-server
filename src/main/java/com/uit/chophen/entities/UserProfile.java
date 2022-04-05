@@ -6,17 +6,17 @@ import java.util.List;
 
 
 /**
- * The persistent class for the users database table.
+ * The persistent class for the user_profiles database table.
  * 
  */
 @Entity
-@Table(name="users")
-@NamedQuery(name="User.findAll", query="SELECT u FROM User u")
-public class User implements Serializable {
+@Table(name="user_profiles")
+@NamedQuery(name="UserProfile.findAll", query="SELECT u FROM UserProfile u")
+public class UserProfile implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="user_id")
 	private int userId;
 
@@ -33,42 +33,42 @@ public class User implements Serializable {
 	private String userPhone;
 
 	//bi-directional many-to-one association to Conversation
-	@OneToMany(mappedBy="user1")
+	@OneToMany(mappedBy="userProfile1")
 	private List<Conversation> conversations1;
 
 	//bi-directional many-to-one association to Conversation
-	@OneToMany(mappedBy="user2")
+	@OneToMany(mappedBy="userProfile2")
 	private List<Conversation> conversations2;
 
 	//bi-directional many-to-one association to Listing
-	@OneToMany(mappedBy="user")
+	@OneToMany(mappedBy="userProfile")
 	private List<Listing> listings;
 
 	//bi-directional many-to-one association to UserNotification
-	@OneToMany(mappedBy="user")
+	@OneToMany(mappedBy="userProfile")
 	private List<UserNotification> userNotifications;
 
 	//bi-directional many-to-one association to UserRating
-	@OneToMany(mappedBy="user1")
-	private List<UserRating> userRatings1;
+	@OneToMany(mappedBy="creator")
+	private List<UserRating> userRatingsCreated;
 
 	//bi-directional many-to-one association to UserRating
-	@OneToMany(mappedBy="user2")
-	private List<UserRating> userRatings2;
+	@OneToMany(mappedBy="target")
+	private List<UserRating> userRatingsReceived;
 
 	//bi-directional many-to-one association to UserReport
-	@OneToMany(mappedBy="user1")
-	private List<UserReport> userReports1;
+	@OneToMany(mappedBy="creator")
+	private List<UserReport> userReportsCreated;
 
 	//bi-directional many-to-one association to UserReport
-	@OneToMany(mappedBy="user2")
-	private List<UserReport> userReports2;
+	@OneToMany(mappedBy="target")
+	private List<UserReport> userReportsReceived;
 
 	//bi-directional many-to-one association to UserSavedListing
-	@OneToMany(mappedBy="user")
+	@OneToMany(mappedBy="userProfile")
 	private List<UserSavedListing> userSavedListings;
 
-	public User() {
+	public UserProfile() {
 	}
 
 	public int getUserId() {
@@ -121,14 +121,14 @@ public class User implements Serializable {
 
 	public Conversation addConversations1(Conversation conversations1) {
 		getConversations1().add(conversations1);
-		conversations1.setUser1(this);
+		conversations1.setUserProfile1(this);
 
 		return conversations1;
 	}
 
 	public Conversation removeConversations1(Conversation conversations1) {
 		getConversations1().remove(conversations1);
-		conversations1.setUser1(null);
+		conversations1.setUserProfile1(null);
 
 		return conversations1;
 	}
@@ -143,14 +143,14 @@ public class User implements Serializable {
 
 	public Conversation addConversations2(Conversation conversations2) {
 		getConversations2().add(conversations2);
-		conversations2.setUser2(this);
+		conversations2.setUserProfile2(this);
 
 		return conversations2;
 	}
 
 	public Conversation removeConversations2(Conversation conversations2) {
 		getConversations2().remove(conversations2);
-		conversations2.setUser2(null);
+		conversations2.setUserProfile2(null);
 
 		return conversations2;
 	}
@@ -165,14 +165,14 @@ public class User implements Serializable {
 
 	public Listing addListing(Listing listing) {
 		getListings().add(listing);
-		listing.setUser(this);
+		listing.setUserProfile(this);
 
 		return listing;
 	}
 
 	public Listing removeListing(Listing listing) {
 		getListings().remove(listing);
-		listing.setUser(null);
+		listing.setUserProfile(null);
 
 		return listing;
 	}
@@ -187,104 +187,104 @@ public class User implements Serializable {
 
 	public UserNotification addUserNotification(UserNotification userNotification) {
 		getUserNotifications().add(userNotification);
-		userNotification.setUser(this);
+		userNotification.setUserProfile(this);
 
 		return userNotification;
 	}
 
 	public UserNotification removeUserNotification(UserNotification userNotification) {
 		getUserNotifications().remove(userNotification);
-		userNotification.setUser(null);
+		userNotification.setUserProfile(null);
 
 		return userNotification;
 	}
 
-	public List<UserRating> getUserRatings1() {
-		return this.userRatings1;
+	public List<UserRating> getUserRatingsCreated() {
+		return this.userRatingsCreated;
 	}
 
-	public void setUserRatings1(List<UserRating> userRatings1) {
-		this.userRatings1 = userRatings1;
+	public void setUserRatings1(List<UserRating> userRating) {
+		this.userRatingsCreated = userRating;
 	}
 
-	public UserRating addUserRatings1(UserRating userRatings1) {
-		getUserRatings1().add(userRatings1);
-		userRatings1.setUser1(this);
+	public UserRating addUserRatingsCreated(UserRating userRating) {
+		getUserRatingsCreated().add(userRating);
+		userRating.setCreator(this);
 
-		return userRatings1;
+		return userRating;
 	}
 
-	public UserRating removeUserRatings1(UserRating userRatings1) {
-		getUserRatings1().remove(userRatings1);
-		userRatings1.setUser1(null);
+	public UserRating removeUserRatingsCreated(UserRating userRating) {
+		getUserRatingsCreated().remove(userRating);
+		userRating.setCreator(null);
 
-		return userRatings1;
+		return userRating;
 	}
 
-	public List<UserRating> getUserRatings2() {
-		return this.userRatings2;
+	public List<UserRating> getUserRatingsReceived() {
+		return this.userRatingsReceived;
 	}
 
-	public void setUserRatings2(List<UserRating> userRatings2) {
-		this.userRatings2 = userRatings2;
+	public void setUserRatingsReceived(List<UserRating> userRatings) {
+		this.userRatingsReceived = userRatings;
 	}
 
-	public UserRating addUserRatings2(UserRating userRatings2) {
-		getUserRatings2().add(userRatings2);
-		userRatings2.setUser2(this);
+	public UserRating addUserRatingsReceived(UserRating userRating) {
+		getUserRatingsReceived().add(userRating);
+		userRating.setTarget(this);
 
-		return userRatings2;
+		return userRating;
 	}
 
-	public UserRating removeUserRatings2(UserRating userRatings2) {
-		getUserRatings2().remove(userRatings2);
-		userRatings2.setUser2(null);
+	public UserRating removeUserRatingsReceived(UserRating userRating) {
+		getUserRatingsReceived().remove(userRating);
+		userRating.setTarget(null);
 
-		return userRatings2;
+		return userRating;
 	}
 
-	public List<UserReport> getUserReports1() {
-		return this.userReports1;
+	public List<UserReport> getUserReportsCreated() {
+		return this.userReportsCreated;
 	}
 
-	public void setUserReports1(List<UserReport> userReports1) {
-		this.userReports1 = userReports1;
+	public void setUserReportsCreated(List<UserReport> userReports) {
+		this.userReportsCreated= userReports;
 	}
 
-	public UserReport addUserReports1(UserReport userReports1) {
-		getUserReports1().add(userReports1);
-		userReports1.setUser1(this);
+	public UserReport addUserReportsCreated(UserReport userReport) {
+		getUserReportsCreated().add(userReport);
+		userReport.setCreator(this);
 
-		return userReports1;
+		return userReport;
 	}
 
-	public UserReport removeUserReports1(UserReport userReports1) {
-		getUserReports1().remove(userReports1);
-		userReports1.setUser1(null);
+	public UserReport removeUserReports1(UserReport userReport) {
+		getUserReportsCreated().remove(userReport);
+		userReport.setCreator(null);
 
-		return userReports1;
+		return userReport;
 	}
 
-	public List<UserReport> getUserReports2() {
-		return this.userReports2;
+	public List<UserReport> getUserReportsReceived() {
+		return this.userReportsReceived;
 	}
 
-	public void setUserReports2(List<UserReport> userReports2) {
-		this.userReports2 = userReports2;
+	public void setUserReportsReceived(List<UserReport> userReports) {
+		this.userReportsReceived = userReports;
 	}
 
-	public UserReport addUserReports2(UserReport userReports2) {
-		getUserReports2().add(userReports2);
-		userReports2.setUser2(this);
+	public UserReport addUserReportsReceived(UserReport userReport) {
+		getUserReportsReceived().add(userReport);
+		userReport.setTarget(this);
 
-		return userReports2;
+		return userReport;
 	}
 
-	public UserReport removeUserReports2(UserReport userReports2) {
-		getUserReports2().remove(userReports2);
-		userReports2.setUser2(null);
+	public UserReport removeUserReportsReceived(UserReport userReport) {
+		getUserReportsReceived().remove(userReport);
+		userReport.setTarget(null);
 
-		return userReports2;
+		return userReport;
 	}
 
 	public List<UserSavedListing> getUserSavedListings() {
@@ -297,14 +297,14 @@ public class User implements Serializable {
 
 	public UserSavedListing addUserSavedListing(UserSavedListing userSavedListing) {
 		getUserSavedListings().add(userSavedListing);
-		userSavedListing.setUser(this);
+		userSavedListing.setUserProfile(this);
 
 		return userSavedListing;
 	}
 
 	public UserSavedListing removeUserSavedListing(UserSavedListing userSavedListing) {
 		getUserSavedListings().remove(userSavedListing);
-		userSavedListing.setUser(null);
+		userSavedListing.setUserProfile(null);
 
 		return userSavedListing;
 	}

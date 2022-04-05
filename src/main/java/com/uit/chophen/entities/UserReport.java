@@ -15,7 +15,7 @@ public class UserReport implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="user_report_id")
 	private int userReportId;
 
@@ -28,15 +28,15 @@ public class UserReport implements Serializable {
 	@Column(name="user_report_title")
 	private String userReportTitle;
 
-	//bi-directional many-to-one association to User
+	//bi-directional many-to-one association to UserProfile
 	@ManyToOne
 	@JoinColumn(name="user_report_creator")
-	private User user1;
+	private UserProfile creator;
 
-	//bi-directional many-to-one association to User
+	//bi-directional many-to-one association to UserProfile
 	@ManyToOne
 	@JoinColumn(name="user_report_target")
-	private User user2;
+	private UserProfile target;
 
 	public UserReport() {
 	}
@@ -73,20 +73,20 @@ public class UserReport implements Serializable {
 		this.userReportTitle = userReportTitle;
 	}
 
-	public User getUser1() {
-		return this.user1;
+	public UserProfile getCreator() {
+		return this.creator;
 	}
 
-	public void setUser1(User user1) {
-		this.user1 = user1;
+	public void setCreator(UserProfile userProfile) {
+		this.creator = userProfile;
 	}
 
-	public User getUser2() {
-		return this.user2;
+	public UserProfile getTarget() {
+		return this.target;
 	}
 
-	public void setUser2(User user2) {
-		this.user2 = user2;
+	public void setTarget(UserProfile userProfile) {
+		this.target = userProfile;
 	}
 
 }

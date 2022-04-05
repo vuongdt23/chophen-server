@@ -16,7 +16,7 @@ public class ListingCategory implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="listing_category_id")
 	private int listingCategoryId;
 

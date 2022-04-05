@@ -16,22 +16,22 @@ public class Conversation implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="conversation_id")
 	private int conversationId;
 
 	@Column(name="conversation_timestamp")
 	private String conversationTimestamp;
 
-	//bi-directional many-to-one association to User
+	//bi-directional many-to-one association to UserProfile
 	@ManyToOne
 	@JoinColumn(name="conversation_user_one")
-	private User user1;
+	private UserProfile userProfile1;
 
-	//bi-directional many-to-one association to User
+	//bi-directional many-to-one association to UserProfile
 	@ManyToOne
 	@JoinColumn(name="conversation_user_two")
-	private User user2;
+	private UserProfile userProfile2;
 
 	//bi-directional many-to-one association to Message
 	@OneToMany(mappedBy="conversation")
@@ -56,20 +56,20 @@ public class Conversation implements Serializable {
 		this.conversationTimestamp = conversationTimestamp;
 	}
 
-	public User getUser1() {
-		return this.user1;
+	public UserProfile getUserProfile1() {
+		return this.userProfile1;
 	}
 
-	public void setUser1(User user1) {
-		this.user1 = user1;
+	public void setUserProfile1(UserProfile userProfile1) {
+		this.userProfile1 = userProfile1;
 	}
 
-	public User getUser2() {
-		return this.user2;
+	public UserProfile getUserProfile2() {
+		return this.userProfile2;
 	}
 
-	public void setUser2(User user2) {
-		this.user2 = user2;
+	public void setUserProfile2(UserProfile userProfile2) {
+		this.userProfile2 = userProfile2;
 	}
 
 	public List<Message> getMessages() {

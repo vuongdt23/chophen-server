@@ -16,7 +16,7 @@ public class ListingStatus implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="listing_status_id")
 	private int listingStatusId;
 
