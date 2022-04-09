@@ -32,6 +32,18 @@ public class UserProfile implements Serializable {
 	@Column(name="user_phone")
 	private String userPhone;
 
+	@Column(name="user_pic", length = 2048)
+	private String userPic;
+
+
+	public String getUserPic() {
+		return userPic;
+	}
+
+	public void setUserPic(String userPic) {
+		this.userPic = userPic;
+	}
+
 	//bi-directional many-to-one association to Conversation
 	@OneToMany(mappedBy="userProfile1")
 	private List<Conversation> conversations1;
@@ -67,6 +79,12 @@ public class UserProfile implements Serializable {
 	//bi-directional many-to-one association to UserSavedListing
 	@OneToMany(mappedBy="userProfile")
 	private List<UserSavedListing> userSavedListings;
+
+	@ManyToOne
+	@JoinColumn(name="university_id")
+	private University userUniversity;
+
+	
 
 	public UserProfile() {
 	}
@@ -203,7 +221,7 @@ public class UserProfile implements Serializable {
 		return this.userRatingsCreated;
 	}
 
-	public void setUserRatings1(List<UserRating> userRating) {
+	public void setUserRatingsCreated(List<UserRating> userRating) {
 		this.userRatingsCreated = userRating;
 	}
 
@@ -307,6 +325,14 @@ public class UserProfile implements Serializable {
 		userSavedListing.setUserProfile(null);
 
 		return userSavedListing;
+	}
+
+	public University getUserUniversity() {
+		return userUniversity;
+	}
+
+	public void setUserUniversity(University userUniversity) {
+		this.userUniversity = userUniversity;
 	}
 
 }
