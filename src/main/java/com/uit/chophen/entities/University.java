@@ -11,7 +11,8 @@ import java.util.List;
 @Entity
 @Table(name = "universities")
 @NamedQuery(name = "University.findAll", query = "SELECT u FROM University u")
-public class University {
+public class University implements Serializable {
+	private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -4,87 +4,97 @@ import java.io.Serializable;
 import javax.persistence.*;
 import java.util.List;
 
-
 /**
  * The persistent class for the user_profiles database table.
  * 
  */
 @Entity
-@Table(name="user_profiles")
-@NamedQuery(name="UserProfile.findAll", query="SELECT u FROM UserProfile u")
+@Table(name = "user_profiles")
+@NamedQuery(name = "UserProfile.findAll", query = "SELECT u FROM UserProfile u")
 public class UserProfile implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="user_id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "user_id")
 	private int userId;
 
-	@Column(name="user_address")
+	@Column(name = "user_address")
 	private String userAddress;
 
-	@Column(name="user_email")
+	@Column(name = "user_email")
 	private String userEmail;
 
-	@Column(name="user_full_name")
+	@Column(name = "user_full_name")
 	private String userFullName;
 
-	@Column(name="user_phone")
+	@Column(name = "user_phone")
 	private String userPhone;
 
-	@Column(name="user_pic", length = 2048)
+	@Column(name = "user_pic", length = 2048)
 	private String userPic;
 
+	// Security
+	@Column(name = "user_roles")
+	private String[] roles;
 
-	public String getUserPic() {
-		return userPic;
-	}
+	@Column(name = "user_authorities")
+	private String[] authorities;
 
-	public void setUserPic(String userPic) {
-		this.userPic = userPic;
-	}
+	@Column(name = "user_is_active")
+	private Boolean isActive;
 
-	//bi-directional many-to-one association to Conversation
-	@OneToMany(mappedBy="userProfile1")
+	@Column(name = "user_is_not_locked")
+	private Boolean isNotLocked;
+
+	
+
+	@Column(name = "user_account_name")
+	private String accountName;
+
+	@Column(name = "user_password")
+	private String password;
+	//
+
+	// bi-directional many-to-one association to Conversation
+	@OneToMany(mappedBy = "userProfile1")
 	private List<Conversation> conversations1;
 
-	//bi-directional many-to-one association to Conversation
-	@OneToMany(mappedBy="userProfile2")
+	// bi-directional many-to-one association to Conversation
+	@OneToMany(mappedBy = "userProfile2")
 	private List<Conversation> conversations2;
 
-	//bi-directional many-to-one association to Listing
-	@OneToMany(mappedBy="userProfile")
+	// bi-directional many-to-one association to Listing
+	@OneToMany(mappedBy = "userProfile")
 	private List<Listing> listings;
 
-	//bi-directional many-to-one association to UserNotification
-	@OneToMany(mappedBy="userProfile")
+	// bi-directional many-to-one association to UserNotification
+	@OneToMany(mappedBy = "userProfile")
 	private List<UserNotification> userNotifications;
 
-	//bi-directional many-to-one association to UserRating
-	@OneToMany(mappedBy="creator")
+	// bi-directional many-to-one association to UserRating
+	@OneToMany(mappedBy = "creator")
 	private List<UserRating> userRatingsCreated;
 
-	//bi-directional many-to-one association to UserRating
-	@OneToMany(mappedBy="target")
+	// bi-directional many-to-one association to UserRating
+	@OneToMany(mappedBy = "target")
 	private List<UserRating> userRatingsReceived;
 
-	//bi-directional many-to-one association to UserReport
-	@OneToMany(mappedBy="creator")
+	// bi-directional many-to-one association to UserReport
+	@OneToMany(mappedBy = "creator")
 	private List<UserReport> userReportsCreated;
 
-	//bi-directional many-to-one association to UserReport
-	@OneToMany(mappedBy="target")
+	// bi-directional many-to-one association to UserReport
+	@OneToMany(mappedBy = "target")
 	private List<UserReport> userReportsReceived;
 
-	//bi-directional many-to-one association to UserSavedListing
-	@OneToMany(mappedBy="userProfile")
+	// bi-directional many-to-one association to UserSavedListing
+	@OneToMany(mappedBy = "userProfile")
 	private List<UserSavedListing> userSavedListings;
 
 	@ManyToOne
-	@JoinColumn(name="university_id")
+	@JoinColumn(name = "university_id")
 	private University userUniversity;
-
-	
 
 	public UserProfile() {
 	}
@@ -266,7 +276,7 @@ public class UserProfile implements Serializable {
 	}
 
 	public void setUserReportsCreated(List<UserReport> userReports) {
-		this.userReportsCreated= userReports;
+		this.userReportsCreated = userReports;
 	}
 
 	public UserReport addUserReportsCreated(UserReport userReport) {
@@ -335,4 +345,60 @@ public class UserProfile implements Serializable {
 		this.userUniversity = userUniversity;
 	}
 
+	public String getUserPic() {
+		return userPic;
+	}
+
+	public void setUserPic(String userPic) {
+		this.userPic = userPic;
+	}
+
+	public String[] getRoles() {
+		return roles;
+	}
+
+	public void setRoles(String[] roles) {
+		this.roles = roles;
+	}
+
+	public String[] getAuthorities() {
+		return authorities;
+	}
+
+	public void setAuthorities(String[] authorities) {
+		this.authorities = authorities;
+	}
+
+
+	public Boolean getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
+	}
+
+	public Boolean getIsNotLocked() {
+		return isNotLocked;
+	}
+
+	public void setIsNotLocked(Boolean isNotLocked) {
+		this.isNotLocked = isNotLocked;
+	}
+
+	public String getAccountName() {
+		return accountName;
+	}
+
+	public void setAccountName(String accountName) {
+		this.accountName = accountName;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
 }
