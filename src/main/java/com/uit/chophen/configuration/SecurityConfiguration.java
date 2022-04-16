@@ -55,17 +55,21 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Override
 	public void configure(HttpSecurity httpSecurity) throws Exception {
-		httpSecurity.csrf().disable().cors().and().sessionManagement()
-				.sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
-				.antMatchers(PUBLIC_URLS).permitAll().anyRequest().authenticated().and().exceptionHandling()
-				.accessDeniedHandler(jwtAccessDeniedHandler).authenticationEntryPoint(jwtAuthenticationEntryPoint).and()
-				.addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
+		httpSecurity.csrf().disable().cors().and()
+        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        .and().authorizeRequests().antMatchers(PUBLIC_URLS).permitAll()
+        .anyRequest().authenticated()
+        .and()
+        .exceptionHandling().accessDeniedHandler(jwtAccessDeniedHandler)
+        .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+        .and()
+        .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
 	}
 
 	
 	@Bean
 	@Override
-	public AuthenticationManager authenticationManager() throws Exception {
+	public AuthenticationManager authenticationManagerBean() throws Exception {
 		return super.authenticationManagerBean();
 	}
 }

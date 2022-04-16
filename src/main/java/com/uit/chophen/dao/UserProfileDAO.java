@@ -2,12 +2,13 @@ package com.uit.chophen.dao;
 
 import java.util.List;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.uit.chophen.entities.UserProfile;
 
-public interface UserProfileDAO extends JpaRepository<UserProfile, Long>{
+public interface UserProfileDAO {
 
 	public UserProfile findUserProfileByAccountName(String accountName);
-	
+	public List<UserProfile> findAll();
+	public void save (UserProfile userProfile); 
+	public UserProfile findUserProfileByEmail(String email);
 }

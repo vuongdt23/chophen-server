@@ -1,8 +1,11 @@
 package com.uit.chophen.services;
 
+import javax.mail.MessagingException;
+
 import com.uit.chophen.entities.UserProfile;
 import com.uit.chophen.exception.AccountExistsException;
 import com.uit.chophen.exception.EmailExistsException;
+import com.uit.chophen.exception.EmailNotFoundException;
 import com.uit.chophen.exception.UserNotFoundException;
 
 public interface UserProfileService {
@@ -11,4 +14,6 @@ public interface UserProfileService {
 	
 	public UserProfile findUserbyAccoutname(String accountName);
 	public UserProfile findUserByEmail(String email);
+    public void resetPassword(String email) throws MessagingException, EmailNotFoundException;
+
 }

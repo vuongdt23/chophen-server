@@ -13,10 +13,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import static com.uit.chophen.utils.Role.*;
+import static com.uit.chophen.utils.SecurityConstant.*;
+import javax.mail.MessagingException;
+
 import com.uit.chophen.dao.UserProfileDAO;
 import com.uit.chophen.entities.UserProfile;
 import com.uit.chophen.exception.AccountExistsException;
 import com.uit.chophen.exception.EmailExistsException;
+import com.uit.chophen.exception.EmailNotFoundException;
 import com.uit.chophen.exception.UserNotFoundException;
 import com.uit.chophen.security.UserPrincipal;
 
@@ -27,7 +31,7 @@ public class UserProfileServiceImp implements UserProfileService, UserDetailsSer
 	private Logger LOGGER = LoggerFactory.getLogger(getClass());
 	private UserProfileDAO userProfileDAO;
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
-
+	private EmailService emailService;
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		UserProfile userProfile = userProfileDAO.findUserProfileByAccountName(username);
@@ -44,9 +48,10 @@ public class UserProfileServiceImp implements UserProfileService, UserDetailsSer
 	}
 
 	@Autowired
-	public UserProfileServiceImp(UserProfileDAO userProfileDAO, BCryptPasswordEncoder bCryptPasswordEncoder) {
+	public UserProfileServiceImp(UserProfileDAO userProfileDAO, BCryptPasswordEncoder bCryptPasswordEncoder, EmailService emailService) {
 		this.userProfileDAO = userProfileDAO;
 		this.bCryptPasswordEncoder= bCryptPasswordEncoder;
+		this.emailService = emailService;
 	}
 
 	@Override
@@ -84,13 +89,25 @@ public class UserProfileServiceImp implements UserProfileService, UserDetailsSer
 		return bCryptPasswordEncoder.encode(password);
 	}
 
-	//private String generatePassword() {
-		// TODO Auto-generated method stub
-	//	return RandomStringUtils.randomAlphanumeric(10);
-//	}
+	@Override
+    public void resetPassword(String email) throws MessagingException, EmailNotFoundException {
+        UserProfile user = userProfileDAO.findUserProfileByEmail(email);
+        if (user == null) {
+            throw new EmailNotFoundException(NO_USER_FOUND_BY_EMAIL + email);
+        }
+        String password = generatePassword();
+        user.setPassword(encodePassword(password));
+        userProfileDAO.save(user);
+        LOGGER.info("New user password: " + password);
+        emailService.sendNewPasswordEmail(user.getUserFullName(), password, user.getUserEmail());
+    }
+	
+	private String generatePassword() {
+		
+		return RandomStringUtils.randomAlphanumeric(10);
+	}
 
 	private int generateUserId() {
-		// TODO Auto-generated method stub
 		return Integer.parseInt(RandomStringUtils.randomNumeric(6));
 	}
 
@@ -126,15 +143,17 @@ public class UserProfileServiceImp implements UserProfileService, UserDetailsSer
 	}
 
 	@Override
+	@Transactional
 	public UserProfile findUserbyAccoutname(String accountName) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return userProfileDAO.findUserProfileByAccountName(accountName);
 	}
 
 	@Override
+	@Transactional
 	public UserProfile findUserByEmail(String email) {
-		// TODO Auto-generated method stub
-		return null;
+	
+		return userProfileDAO.findUserProfileByEmail(email);
 	}
 
 }

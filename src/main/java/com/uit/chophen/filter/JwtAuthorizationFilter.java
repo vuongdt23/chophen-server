@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import static com.uit.chophen.utils.SecurityConstant.*;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -24,13 +25,12 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
 	private JWTTokenProvider jwtTokenProvider;
 
+	@Autowired
 	public JwtAuthorizationFilter(JWTTokenProvider jwtTokenProvider) {
-		super();
 		this.jwtTokenProvider = jwtTokenProvider;
 	}
 
-	public JwtAuthorizationFilter() {
-	}
+
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -42,7 +42,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 			String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 
 			// If the auth header is null or doesn't contain a bearer token then return
-			if (authorizationHeader == null || authorizationHeader.startsWith(TOKEN_PREFIX)) {
+			if (authorizationHeader == null || !authorizationHeader.startsWith(TOKEN_PREFIX)) {
 				filterChain.doFilter(request, response);
 				return;
 			}

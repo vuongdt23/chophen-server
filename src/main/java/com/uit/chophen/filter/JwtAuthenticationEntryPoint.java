@@ -19,8 +19,7 @@ import com.uit.chophen.utils.HttpResponse;
 @Component
 public class JwtAuthenticationEntryPoint extends Http403ForbiddenEntryPoint {
 
-	public JwtAuthenticationEntryPoint() {
-	}
+	
 
 	@Override
 	public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException arg2)
