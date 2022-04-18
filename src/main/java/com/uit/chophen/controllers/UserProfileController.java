@@ -31,13 +31,13 @@ import com.uit.chophen.exception.EmailExistsException;
 import com.uit.chophen.exception.EmailNotFoundException;
 import com.uit.chophen.exception.ExceptionHandling;
 import com.uit.chophen.exception.UserNotFoundException;
+import com.uit.chophen.httpdomains.request.RateUserRequestBody;
+import com.uit.chophen.httpdomains.response.LoginSucessResponseBody;
 import com.uit.chophen.security.UserPrincipal;
 import com.uit.chophen.services.UserProfileService;
 import com.uit.chophen.services.UserRatingService;
 import com.uit.chophen.utils.HttpResponse;
 import com.uit.chophen.utils.JWTTokenProvider;
-
-import httpdomains.RateUserRequestBody;
 
 @RestController
 @RequestMapping(value = "/user")
@@ -59,13 +59,14 @@ public class UserProfileController extends ExceptionHandling {
 	}
 
 	@PostMapping("/login")
-	public ResponseEntity<String> login(@RequestBody UserProfile user) {
+	public ResponseEntity<LoginSucessResponseBody> login(@RequestBody UserProfile user) {
 		authenticate(user.getAccountName(), user.getPassword());
 		UserProfile loginUser = userProfileService.findUserbyAccoutname(user.getAccountName());
 		UserPrincipal principal = new UserPrincipal(loginUser);
 		String token = jwtTokenProvider.generateJwtToken(principal);
+		LoginSucessResponseBody resBody = new LoginSucessResponseBody(token);
 		HttpHeaders jwtHeaders = getJwtHeader(principal);
-		return new ResponseEntity<>("Login successfully", jwtHeaders, HttpStatus.OK);
+		return new ResponseEntity<LoginSucessResponseBody>(resBody, jwtHeaders, HttpStatus.OK);
 	}
 
 	@GetMapping("/resetPassword/{email}")

@@ -1,4 +1,4 @@
-package httpdomains;
+package com.uit.chophen.httpdomains.request;
 
 public class RateUserRequestBody {
 
