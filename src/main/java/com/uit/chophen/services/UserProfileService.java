@@ -14,6 +14,7 @@ public interface UserProfileService {
 	
 	public UserProfile findUserbyAccoutname(String accountName);
 	public UserProfile findUserByEmail(String email);
+	public UserProfile findUserbyId(int Id);
     public void resetPassword(String email) throws MessagingException, EmailNotFoundException;
 
 }

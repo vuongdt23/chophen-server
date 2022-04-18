@@ -35,8 +35,7 @@ public class UserRating implements Serializable {
 	@JoinColumn(name="user_rating_target")
 	private UserProfile target;
 
-	public UserRating() {
-	}
+	
 
 	public int getUserRatingId() {
 		return this.userRatingId;

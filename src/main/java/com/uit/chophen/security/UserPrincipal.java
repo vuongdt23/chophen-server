@@ -24,6 +24,10 @@ public class UserPrincipal implements UserDetails {
 	public UserPrincipal(UserProfile userProfile) {
 		this.userProfile = userProfile;
 	}
+	
+	public String getUserId() {
+		return Integer.toString(this.userProfile.getUserId());
+	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -61,5 +65,7 @@ public class UserPrincipal implements UserDetails {
 	public boolean isEnabled() {
 		return this.userProfile.getIsActive();
 	}
+	
+	
 
 }

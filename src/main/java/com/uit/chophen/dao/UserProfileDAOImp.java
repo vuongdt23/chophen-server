@@ -56,4 +56,12 @@ public class UserProfileDAOImp implements UserProfileDAO {
 		return userProfile;
 	}
 
+	@Override
+	public UserProfile findUserProfileById(int id) {
+		Session session = entityManager.unwrap(Session.class);
+
+		UserProfile userProfile = (UserProfile) session.find(UserProfile.class, id);
+		return userProfile;
+	}
+
 }

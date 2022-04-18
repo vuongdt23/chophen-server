@@ -156,4 +156,10 @@ public class UserProfileServiceImp implements UserProfileService, UserDetailsSer
 		return userProfileDAO.findUserProfileByEmail(email);
 	}
 
+	@Override
+	public UserProfile findUserbyId(int Id) {
+		// TODO Auto-generated method stub
+		return userProfileDAO.findUserProfileById(Id);
+	}
+
 }

@@ -2,6 +2,10 @@ package com.uit.chophen.entities;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.List;
 
 /**
@@ -11,6 +15,7 @@ import java.util.List;
 @Entity
 @Table(name = "user_profiles")
 @NamedQuery(name = "UserProfile.findAll", query = "SELECT u FROM UserProfile u")
+
 public class UserProfile implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -52,31 +57,38 @@ public class UserProfile implements Serializable {
 	@Column(name = "user_account_name")
 	private String accountName;
 
+	
 	@Column(name = "user_password")
 	private String password;
 	//
 
 	// bi-directional many-to-one association to Conversation
+	@JsonIgnore
 	@OneToMany(mappedBy = "userProfile1")
 	private List<Conversation> conversations1;
 
 	// bi-directional many-to-one association to Conversation
+	@JsonIgnore
 	@OneToMany(mappedBy = "userProfile2")
 	private List<Conversation> conversations2;
 
 	// bi-directional many-to-one association to Listing
+	@JsonIgnore
 	@OneToMany(mappedBy = "userProfile")
 	private List<Listing> listings;
 
 	// bi-directional many-to-one association to UserNotification
+	@JsonIgnore
 	@OneToMany(mappedBy = "userProfile")
 	private List<UserNotification> userNotifications;
 
 	// bi-directional many-to-one association to UserRating
+	@JsonIgnore
 	@OneToMany(mappedBy = "creator")
 	private List<UserRating> userRatingsCreated;
 
 	// bi-directional many-to-one association to UserRating
+	@JsonIgnore
 	@OneToMany(mappedBy = "target")
 	private List<UserRating> userRatingsReceived;
 
