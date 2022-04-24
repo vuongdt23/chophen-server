@@ -19,6 +19,9 @@ public class FCMInitializer {
 
 	@Value("${app.firebase-config}")
 	private String firebaseConfigPath;
+	
+	@Value("${app.storagebucket}")
+	private String storageBucket;
 	Logger logger = LoggerFactory.getLogger(FCMInitializer.class);
 
 	@PostConstruct
@@ -26,7 +29,7 @@ public class FCMInitializer {
 		GoogleCredentials googleCredentials = GoogleCredentials
 				.fromStream(new ClassPathResource(firebaseConfigPath).getInputStream());
 
-		FirebaseOptions options = FirebaseOptions.builder().setCredentials(googleCredentials).build();
+		FirebaseOptions options = FirebaseOptions.builder().setCredentials(googleCredentials).setStorageBucket(storageBucket).build();
 
 		if (FirebaseApp.getApps().isEmpty()) {
 			FirebaseApp.initializeApp(options);

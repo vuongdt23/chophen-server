@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.uit.chophen.dao.UserRatingDAO;
+import com.uit.chophen.entities.UserProfile;
 import com.uit.chophen.entities.UserRating;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,11 +24,16 @@ public class UserRatingServiceImp implements UserRatingService {
 
 	@Override
 	@Transactional
-	public void createRating(UserRating userRating) {
-		this.userRatingDAO.save(userRating);
-		LOGGER.info("RATING CREATED FOR USER " + userRating.getTarget().getUserId() + " by User "
-				+ userRating.getCreator().getUserId() + " valued " + userRating.getUserRatingPoint() + " at "
-				+ userRating.getUserRatingTimestamp());
+	public UserRating createRating(UserProfile creator, UserProfile target, int score) {
+		
+		UserRating newRating = new UserRating();
+		newRating.setCreator(creator);
+		newRating.setTarget(target);
+		newRating.setUserRatingPoint(score);
+		LOGGER.info("RATING CREATED FOR USER " + newRating.getTarget().getUserId() + " by User "
+				+ newRating.getCreator().getUserId() + " valued " + newRating.getUserRatingPoint() + " at "
+				+ newRating.getUserRatingTimestamp());
+		return newRating;
 	}
 
 }

@@ -1,7 +1,9 @@
 package com.uit.chophen.controllers;
 
+import java.util.List;
 import static com.uit.chophen.utils.SecurityConstant.*;
 
+import java.io.IOException;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 
@@ -22,8 +24,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.google.cloud.storage.Blob;
+import com.google.cloud.storage.BlobId;
+import com.google.cloud.storage.BlobInfo;
+import com.google.cloud.storage.Bucket;
+import com.google.firebase.cloud.StorageClient;
 import com.uit.chophen.entities.UserProfile;
 import com.uit.chophen.entities.UserRating;
 import com.uit.chophen.exception.AccountExistsException;
@@ -69,7 +78,7 @@ public class UserProfileController extends ExceptionHandling {
 		return new ResponseEntity<LoginSucessResponseBody>(resBody, jwtHeaders, HttpStatus.OK);
 	}
 
-	@GetMapping("/resetPassword/{email}")
+	@PostMapping("/resetPassword/{email}")
 	public ResponseEntity<HttpResponse> resetPassword(@PathVariable("email") String email)
 			throws MessagingException, EmailNotFoundException {
 		userProfileService.resetPassword(email);
@@ -82,6 +91,16 @@ public class UserProfileController extends ExceptionHandling {
 				httpStatus);
 	}
 
+	@PostMapping("/updateProfilePic")
+	public ResponseEntity<UserProfile> updateProfilePic(@RequestHeader(name = "Authorization") String jwtToken,
+			@RequestPart("file") MultipartFile file) throws IOException {
+
+		int userId = Integer.parseInt(jwtTokenProvider.getSubjectFromToken(jwtToken.substring(TOKEN_PREFIX.length())));
+
+		return new ResponseEntity<UserProfile>(userProfileService.updateProfilePic(userId, file), HttpStatus.OK);
+
+	}
+
 	@Autowired
 	public UserProfileController(UserProfileService userProfileService, AuthenticationManager authenticationManager,
 			JWTTokenProvider jwtTokenProvider, UserRatingService userRatingService) {
@@ -92,7 +111,6 @@ public class UserProfileController extends ExceptionHandling {
 	}
 
 	private HttpHeaders getJwtHeader(UserPrincipal principal) {
-		// TODO Auto-generated method stub
 		HttpHeaders headers = new HttpHeaders();
 		headers.add(JWT_TOKEN_HEADER, jwtTokenProvider.generateJwtToken(principal));
 		return headers;
@@ -109,27 +127,6 @@ public class UserProfileController extends ExceptionHandling {
 		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
 
-	@PostMapping("/rate/{userId}")
-	public ResponseEntity<UserRating> rateUser(@PathVariable("userId") int userId,
-			@RequestHeader(name = "Authorization") String token, @RequestBody RateUserRequestBody reqBody) { 
-		// LOGGER.info(token);
-		UserProfile target = userProfileService.findUserbyId(userId);
-
-		String creatorId = jwtTokenProvider.getSubjectFromToken(token.substring(TOKEN_PREFIX.length()));
-		
-		UserProfile creator = userProfileService.findUserbyId(Integer.parseInt(creatorId));
-		
-		UserRating rating = new UserRating();
-		rating.setCreator(creator);
-		rating.setTarget(target);
-		rating.setUserRatingPoint(reqBody.getUserRatingPoint());
-		
-		userRatingService.createRating(rating);
-		
-		//rating.setUserRatingTimestamp(new Date());hj
-		
-
-		return new ResponseEntity<>(rating, HttpStatus.OK);
-	}
+	
 
 }

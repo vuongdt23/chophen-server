@@ -12,10 +12,23 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
 import static com.uit.chophen.utils.Role.*;
 import static com.uit.chophen.utils.SecurityConstant.*;
+
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import javax.mail.MessagingException;
 
+import com.google.cloud.storage.Acl;
+import com.google.cloud.storage.Blob;
+import com.google.cloud.storage.BlobId;
+import com.google.cloud.storage.Bucket;
+import com.google.firebase.cloud.StorageClient;
 import com.uit.chophen.dao.UserProfileDAO;
 import com.uit.chophen.entities.UserProfile;
 import com.uit.chophen.exception.AccountExistsException;
@@ -32,6 +45,7 @@ public class UserProfileServiceImp implements UserProfileService, UserDetailsSer
 	private UserProfileDAO userProfileDAO;
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 	private EmailService emailService;
+
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		UserProfile userProfile = userProfileDAO.findUserProfileByAccountName(username);
@@ -48,18 +62,20 @@ public class UserProfileServiceImp implements UserProfileService, UserDetailsSer
 	}
 
 	@Autowired
-	public UserProfileServiceImp(UserProfileDAO userProfileDAO, BCryptPasswordEncoder bCryptPasswordEncoder, EmailService emailService) {
+	public UserProfileServiceImp(UserProfileDAO userProfileDAO, BCryptPasswordEncoder bCryptPasswordEncoder,
+			EmailService emailService) {
 		this.userProfileDAO = userProfileDAO;
-		this.bCryptPasswordEncoder= bCryptPasswordEncoder;
+		this.bCryptPasswordEncoder = bCryptPasswordEncoder;
 		this.emailService = emailService;
 	}
 
 	@Override
 	public UserProfile signUp(String userAddress, String userEmail, String userFullName, String userPhone,
-			String accountName, String password) throws AccountExistsException, EmailExistsException, UserNotFoundException {
-		
+			String accountName, String password)
+			throws AccountExistsException, EmailExistsException, UserNotFoundException {
+
 		validateNewAccountnameAndEmail(StringUtils.EMPTY, accountName, userEmail);
-		
+
 		UserProfile profile = new UserProfile();
 		profile.setUserId(generateUserId());
 		String encodedPassword = encodePassword(password);
@@ -73,7 +89,7 @@ public class UserProfileServiceImp implements UserProfileService, UserDetailsSer
 		profile.setRole(ROLE_USER.name());
 		profile.setAuthorities(ROLE_USER.getAuthorities());
 		profile.setUserPic(getTempProfileImageUrl());
-		
+
 		userProfileDAO.save(profile);
 		LOGGER.info("New user password: " + password);
 		return profile;
@@ -90,20 +106,20 @@ public class UserProfileServiceImp implements UserProfileService, UserDetailsSer
 	}
 
 	@Override
-    public void resetPassword(String email) throws MessagingException, EmailNotFoundException {
-        UserProfile user = userProfileDAO.findUserProfileByEmail(email);
-        if (user == null) {
-            throw new EmailNotFoundException(NO_USER_FOUND_BY_EMAIL + email);
-        }
-        String password = generatePassword();
-        user.setPassword(encodePassword(password));
-        userProfileDAO.save(user);
-        LOGGER.info("New user password: " + password);
-        emailService.sendNewPasswordEmail(user.getUserFullName(), password, user.getUserEmail());
-    }
-	
+	public void resetPassword(String email) throws MessagingException, EmailNotFoundException {
+		UserProfile user = userProfileDAO.findUserProfileByEmail(email);
+		if (user == null) {
+			throw new EmailNotFoundException(NO_USER_FOUND_BY_EMAIL + email);
+		}
+		String password = generatePassword();
+		user.setPassword(encodePassword(password));
+		userProfileDAO.save(user);
+		LOGGER.info("New user password: " + password);
+		emailService.sendNewPasswordEmail(user.getUserFullName(), password, user.getUserEmail());
+	}
+
 	private String generatePassword() {
-		
+
 		return RandomStringUtils.randomAlphanumeric(10);
 	}
 
@@ -111,7 +127,8 @@ public class UserProfileServiceImp implements UserProfileService, UserDetailsSer
 		return Integer.parseInt(RandomStringUtils.randomNumeric(6));
 	}
 
-	private UserProfile validateNewAccountnameAndEmail(String currentUsername, String newUsername, String newEmail) throws AccountExistsException, EmailExistsException, UserNotFoundException {
+	private UserProfile validateNewAccountnameAndEmail(String currentUsername, String newUsername, String newEmail)
+			throws AccountExistsException, EmailExistsException, UserNotFoundException {
 		if (StringUtils.isNotBlank(currentUsername)) {
 			UserProfile currentUser = findUserbyAccoutname(currentUsername);
 			if (currentUser == null) {
@@ -145,14 +162,14 @@ public class UserProfileServiceImp implements UserProfileService, UserDetailsSer
 	@Override
 	@Transactional
 	public UserProfile findUserbyAccoutname(String accountName) {
-		
+
 		return userProfileDAO.findUserProfileByAccountName(accountName);
 	}
 
 	@Override
 	@Transactional
 	public UserProfile findUserByEmail(String email) {
-	
+
 		return userProfileDAO.findUserProfileByEmail(email);
 	}
 
@@ -160,6 +177,23 @@ public class UserProfileServiceImp implements UserProfileService, UserDetailsSer
 	public UserProfile findUserbyId(int Id) {
 		// TODO Auto-generated method stub
 		return userProfileDAO.findUserProfileById(Id);
+	}
+
+	@Override
+	public UserProfile updateProfilePic(int id, MultipartFile file) throws IOException {
+
+		UserProfile userProfile = userProfileDAO.findUserProfileById(id);
+		String pattern = "dd-MM-yyyy HH:mm:ss";
+		DateFormat df = new SimpleDateFormat(pattern);
+		Bucket storageBucket = StorageClient.getInstance().bucket();
+		String fileName = "profileImages/" + "User" + id + "ProfilePic " + df.format(new Date());
+
+		Blob blob = storageBucket.create(fileName, file.getBytes(), "image/jpeg");
+
+		String profileImgLink = blob.getMediaLink();
+		userProfile.setUserPic(profileImgLink);
+		return userProfile;
+
 	}
 
 }

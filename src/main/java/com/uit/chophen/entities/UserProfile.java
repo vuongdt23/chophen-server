@@ -57,7 +57,7 @@ public class UserProfile implements Serializable {
 	@Column(name = "user_account_name")
 	private String accountName;
 
-	
+	@JsonIgnore
 	@Column(name = "user_password")
 	private String password;
 	//
