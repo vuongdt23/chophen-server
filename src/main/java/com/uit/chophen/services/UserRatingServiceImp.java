@@ -30,10 +30,20 @@ public class UserRatingServiceImp implements UserRatingService {
 		newRating.setCreator(creator);
 		newRating.setTarget(target);
 		newRating.setUserRatingPoint(score);
+		userRatingDAO.save(newRating);
 		LOGGER.info("RATING CREATED FOR USER " + newRating.getTarget().getUserId() + " by User "
 				+ newRating.getCreator().getUserId() + " valued " + newRating.getUserRatingPoint() + " at "
 				+ newRating.getUserRatingTimestamp());
 		return newRating;
+	}
+
+	@Override
+	@Transactional
+	public boolean checkUsersRatingExists(UserProfile creator, UserProfile target) {
+		UserRating userRating = userRatingDAO.getUserRatingByCreatorAndTarget(creator, target);
+		if(userRating!= null) return true;
+		return false;
+		
 	}
 
 }

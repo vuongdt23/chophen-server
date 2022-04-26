@@ -7,5 +7,7 @@ public interface UserRatingDAO {
 
 	
 
-	void save(UserRating userRating);
+	public void save(UserRating userRating);
+	
+	public UserRating getUserRatingByCreatorAndTarget(UserProfile creator, UserProfile target);
 }

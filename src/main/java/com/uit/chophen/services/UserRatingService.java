@@ -6,4 +6,5 @@ import com.uit.chophen.entities.UserRating;
 public interface UserRatingService {
 
 	public UserRating createRating(UserProfile creator, UserProfile target, int score);
+	public boolean checkUsersRatingExists(UserProfile creator, UserProfile target);
 }

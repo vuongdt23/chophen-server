@@ -11,7 +11,7 @@ import com.uit.chophen.entities.UserProfile;
 import com.uit.chophen.entities.UserRating;
 
 @Repository
-public class UserRatingDAOImp implements UserRatingDAO{
+public class UserRatingDAOImp implements UserRatingDAO {
 
 	private EntityManager entityManager;
 
@@ -28,11 +28,14 @@ public class UserRatingDAOImp implements UserRatingDAO{
 
 	}
 
+	@Override
+	public UserRating getUserRatingByCreatorAndTarget(UserProfile creator, UserProfile target) {
+		Session session = entityManager.unwrap(Session.class);
+		String query = "from UserRating u where u.creator = :creator and u.target = :target";
 
-
-	
-
-
-
+		UserRating result = (UserRating) session.createQuery(query).setParameter("creator", creator)
+				.setParameter("target", target).getResultStream().findFirst().orElse(null);
+		return result;
+	}
 
 }
