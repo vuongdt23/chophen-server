@@ -21,4 +21,5 @@ public interface UserProfileService {
 	public UserProfile findUserbyId(int id);
     public void resetPassword(String email) throws MessagingException, EmailNotFoundException;
     public UserProfile updateProfilePic(int id, MultipartFile file) throws IOException;
+    public UserProfile updateProfile(int id, String address, String fullName, String phone);
 }

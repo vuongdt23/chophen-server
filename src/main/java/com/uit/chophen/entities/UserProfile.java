@@ -93,14 +93,17 @@ public class UserProfile implements Serializable {
 	private List<UserRating> userRatingsReceived;
 
 	// bi-directional many-to-one association to UserReport
+	@JsonIgnore
 	@OneToMany(mappedBy = "creator")
 	private List<UserReport> userReportsCreated;
 
 	// bi-directional many-to-one association to UserReport
+	@JsonIgnore
 	@OneToMany(mappedBy = "target")
 	private List<UserReport> userReportsReceived;
 
 	// bi-directional many-to-one association to UserSavedListing
+	@JsonIgnore
 	@OneToMany(mappedBy = "userProfile")
 	private List<UserSavedListing> userSavedListings;
 

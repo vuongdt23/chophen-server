@@ -41,6 +41,7 @@ import com.uit.chophen.exception.EmailNotFoundException;
 import com.uit.chophen.exception.ExceptionHandling;
 import com.uit.chophen.exception.UserNotFoundException;
 import com.uit.chophen.httpdomains.request.RateUserRequestBody;
+import com.uit.chophen.httpdomains.request.UpdateProfileRequestBody;
 import com.uit.chophen.httpdomains.response.LoginSucessResponseBody;
 import com.uit.chophen.security.UserPrincipal;
 import com.uit.chophen.services.UserProfileService;
@@ -126,7 +127,20 @@ public class UserProfileController extends ExceptionHandling {
 		UserProfile user = userProfileService.findUserbyAccoutname(username);
 		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
+	@GetMapping("/findById/{userId}")
+	public ResponseEntity<UserProfile> getUserById(@PathVariable("username") String username) {
+		UserProfile user = userProfileService.findUserbyAccoutname(username);
+		return new ResponseEntity<>(user, HttpStatus.OK);
+	}
 
+	@PostMapping("/update")
+	public ResponseEntity<UserProfile>updateProfile(@RequestBody UpdateProfileRequestBody reqBody,@RequestHeader(name = "Authorization") String jwtToken){
+		int userId = Integer.parseInt(jwtTokenProvider.getSubjectFromToken(jwtToken.substring(TOKEN_PREFIX.length())));
+		
+		UserProfile userProfile = userProfileService.updateProfile(userId, reqBody.getUserAddress(), reqBody.getUserFullName(), reqBody.getUserPhone());
+		return new ResponseEntity<UserProfile>(userProfile, HttpStatus.OK);
+		
+	}
 	
 
 }

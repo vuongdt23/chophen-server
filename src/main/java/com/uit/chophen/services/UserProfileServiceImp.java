@@ -180,6 +180,7 @@ public class UserProfileServiceImp implements UserProfileService, UserDetailsSer
 	}
 
 	@Override
+	@Transactional
 	public UserProfile updateProfilePic(int id, MultipartFile file) throws IOException {
 
 		UserProfile userProfile = userProfileDAO.findUserProfileById(id);
@@ -192,8 +193,21 @@ public class UserProfileServiceImp implements UserProfileService, UserDetailsSer
 
 		String profileImgLink = blob.getMediaLink();
 		userProfile.setUserPic(profileImgLink);
+		userProfileDAO.save(userProfile);
 		return userProfile;
 
+	}
+
+	@Override
+	@Transactional
+	public UserProfile updateProfile(int id, String address, String fullName, String phone) {
+		UserProfile userProfile = userProfileDAO.findUserProfileById(id);
+		if(address != null) userProfile.setUserAddress(address);
+		if(fullName != null) userProfile.setUserFullName(fullName);
+		if(phone!= null) userProfile.setUserPhone(phone);
+		userProfileDAO.save(userProfile);
+
+		return userProfile;
 	}
 
 }
