@@ -42,7 +42,7 @@ public class UserProfileDAOImp implements UserProfileDAO {
 	@Transactional
 	public void save(UserProfile userProfile) {
 		Session session = entityManager.unwrap(Session.class);
-		session.saveOrUpdate(userProfile);
+		session.save(userProfile);
 
 	}
 

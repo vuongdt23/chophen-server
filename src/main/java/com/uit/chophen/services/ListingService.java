@@ -10,4 +10,6 @@ public interface ListingService {
 
 	Listing createListing(String listingTitle, String listingBody, String listingAdress, long listingPrice,
 			MultipartFile listingImg, int[] listingCateogriesId, int creatorId) throws IOException;
+	
+	Listing getListingById(int listingId);
 }

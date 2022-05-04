@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -78,6 +80,13 @@ public class ListingServiceImp implements ListingService {
 		String pattern = "dd-MM-yyyy HH:mm:ss";
 		DateFormat df = new SimpleDateFormat(pattern);
 		return df.format(new Date());
+	}
+
+	@Override
+	@Transactional
+	public Listing getListingById(int listingId) {
+		// TODO Auto-generated method stub
+		return listingDAO.getListingById(listingId);
 	}
 
 }

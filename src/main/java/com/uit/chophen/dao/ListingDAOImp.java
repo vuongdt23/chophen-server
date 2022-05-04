@@ -28,4 +28,13 @@ public class ListingDAOImp implements ListingDAO {
 		
 	}
 
+
+	@Override
+	public Listing getListingById(int listingId) {
+		Session session = entityManager.unwrap(Session.class);
+		Listing listing = session.get(Listing.class, listingId);
+		
+		return listing;
+	}
+
 }

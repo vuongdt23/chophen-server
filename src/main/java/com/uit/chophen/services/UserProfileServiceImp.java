@@ -70,6 +70,7 @@ public class UserProfileServiceImp implements UserProfileService, UserDetailsSer
 	}
 
 	@Override
+	@Transactional
 	public UserProfile signUp(String userAddress, String userEmail, String userFullName, String userPhone,
 			String accountName, String password)
 			throws AccountExistsException, EmailExistsException, UserNotFoundException {

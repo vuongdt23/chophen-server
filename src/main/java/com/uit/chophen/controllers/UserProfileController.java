@@ -41,6 +41,7 @@ import com.uit.chophen.exception.EmailNotFoundException;
 import com.uit.chophen.exception.ExceptionHandling;
 import com.uit.chophen.exception.UserNotFoundException;
 import com.uit.chophen.httpdomains.request.RateUserRequestBody;
+import com.uit.chophen.httpdomains.request.SignUpRequestBody;
 import com.uit.chophen.httpdomains.request.UpdateProfileRequestBody;
 import com.uit.chophen.httpdomains.response.LoginSucessResponseBody;
 import com.uit.chophen.security.UserPrincipal;
@@ -61,10 +62,10 @@ public class UserProfileController extends ExceptionHandling {
 	private UserRatingService userRatingService;
 
 	@PostMapping("/signUp")
-	public ResponseEntity<UserProfile> signUp(@RequestBody UserProfile user)
+	public ResponseEntity<UserProfile> signUp(@RequestBody SignUpRequestBody reqBody)
 			throws UserNotFoundException, AccountExistsException, EmailExistsException {
-		UserProfile userProfile = userProfileService.signUp(user.getUserAddress(), user.getUserEmail(),
-				user.getUserFullName(), user.getUserPhone(), user.getAccountName(), user.getPassword());
+		UserProfile userProfile = userProfileService.signUp(reqBody.getUserAddress(), reqBody.getUserEmail(),
+				reqBody.getUserFullName(), reqBody.getUserPhone(), reqBody.getAccountName(), reqBody.getPassword());
 		return new ResponseEntity<UserProfile>(userProfile, HttpStatus.OK);
 	}
 
@@ -128,8 +129,8 @@ public class UserProfileController extends ExceptionHandling {
 		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
 	@GetMapping("/findById/{userId}")
-	public ResponseEntity<UserProfile> getUserById(@PathVariable("username") String username) {
-		UserProfile user = userProfileService.findUserbyAccoutname(username);
+	public ResponseEntity<UserProfile> getUserById(@PathVariable("userId") int userId) {
+		UserProfile user = userProfileService.findUserbyId(userId);
 		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
 
