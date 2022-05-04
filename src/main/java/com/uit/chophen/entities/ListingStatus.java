@@ -27,7 +27,7 @@ public class ListingStatus implements Serializable {
 	private String listingStatusName;
 
 	//bi-directional many-to-one association to Listing
-	@OneToMany(mappedBy="listingStatusBean")
+	@OneToMany(mappedBy="listingStatus")
 	private List<Listing> listings;
 
 	public ListingStatus() {
