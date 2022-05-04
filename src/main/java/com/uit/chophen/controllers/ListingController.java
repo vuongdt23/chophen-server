@@ -1,0 +1,54 @@
+package com.uit.chophen.controllers;
+
+import static com.uit.chophen.utils.SecurityConstant.TOKEN_PREFIX;
+
+import java.io.IOException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.uit.chophen.entities.Listing;
+import com.uit.chophen.httpdomains.request.CreateListingRequestBody;
+import com.uit.chophen.services.ListingService;
+import com.uit.chophen.utils.JWTTokenProvider;
+
+@RestController
+@RequestMapping(value = "/listings")
+public class ListingController {
+	
+
+	private ListingService listingService;
+	private JWTTokenProvider jwtTokenProvider;
+	
+	@Autowired
+	public ListingController(ListingService listingService, JWTTokenProvider jwtTokenProvider) {
+		this.listingService = listingService;
+		this.jwtTokenProvider = jwtTokenProvider;
+	}
+
+	
+	@PostMapping("/createListing")
+	public ResponseEntity<Listing> createListing(@RequestHeader(name = "Authorization") String jwtToken, @RequestPart("body") CreateListingRequestBody reqBody, @RequestPart("img") MultipartFile img) throws IOException{
+		
+		int userId = Integer.parseInt(jwtTokenProvider.getSubjectFromToken(jwtToken.substring(TOKEN_PREFIX.length())));
+		String listingTitle = reqBody.getListingTitle();
+		String listingBody = reqBody.getListingBody();
+		int[] listingCategories = reqBody.getListingCategories();
+		long listingPrice = reqBody.getListingPrice();
+		String listingAddress = reqBody.getListingAddress();
+			
+		Listing listing = listingService.createListing(listingTitle, listingBody, listingAddress, listingPrice, img, listingCategories, userId);
+		
+		return new ResponseEntity<Listing>(listing, HttpStatus.OK);
+		
+		
+	}
+}

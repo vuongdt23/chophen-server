@@ -34,6 +34,9 @@ public class Listing implements Serializable {
 
 	@Column(name="listing_title")
 	private String listingTitle;
+	
+	@Column(name="listing_Price")
+	private long listingPrice;
 
 	//bi-directional many-to-many association to ListingCategory
 	@ManyToMany
@@ -127,6 +130,14 @@ public class Listing implements Serializable {
 
 	public void setListingStatusBean(ListingStatus listingStatusBean) {
 		this.listingStatusBean = listingStatusBean;
+	}
+
+	public long getListingPrice() {
+		return listingPrice;
+	}
+
+	public void setListingPrice(long listingPrice) {
+		this.listingPrice = listingPrice;
 	}
 
 	public UserProfile getUserProfile() {

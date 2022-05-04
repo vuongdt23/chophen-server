@@ -1,5 +1,8 @@
 package com.uit.chophen.dao;
 
-public class ListingDAO {
+import com.uit.chophen.entities.Listing;
 
+public interface ListingDAO {
+
+	public void saves(Listing listing);
 }
