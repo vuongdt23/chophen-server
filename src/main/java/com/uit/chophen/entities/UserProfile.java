@@ -58,6 +58,7 @@ public class UserProfile implements Serializable {
 	private String accountName;
 
 	
+	@JsonIgnore
 	@Column(name = "user_password")
 	private String password;
 	//
@@ -208,14 +209,14 @@ public class UserProfile implements Serializable {
 
 	public Listing addListing(Listing listing) {
 		getListings().add(listing);
-		listing.setUserProfile(this);
+		listing.setPoster(this);
 
 		return listing;
 	}
 
 	public Listing removeListing(Listing listing) {
 		getListings().remove(listing);
-		listing.setUserProfile(null);
+		listing.setPoster(null);
 
 		return listing;
 	}

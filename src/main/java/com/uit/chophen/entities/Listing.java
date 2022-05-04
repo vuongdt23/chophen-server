@@ -54,12 +54,12 @@ public class Listing implements Serializable {
 	//bi-directional many-to-one association to ListingStatus
 	@ManyToOne
 	@JoinColumn(name="listing_status")
-	private ListingStatus listingStatusBean;
+	private ListingStatus listingStatus;
 
 	//bi-directional many-to-one association to UserProfile
 	@ManyToOne
 	@JoinColumn(name="listing_poster")
-	private UserProfile userProfile;
+	private UserProfile poster;
 
 	//bi-directional many-to-one association to UserSavedListing
 	@OneToMany(mappedBy="listing")
@@ -124,12 +124,12 @@ public class Listing implements Serializable {
 		this.listingCategories = listingCategories;
 	}
 
-	public ListingStatus getListingStatusBean() {
-		return this.listingStatusBean;
+	public ListingStatus getListingStatus() {
+		return this.listingStatus;
 	}
 
-	public void setListingStatusBean(ListingStatus listingStatusBean) {
-		this.listingStatusBean = listingStatusBean;
+	public void setListingStatusBean(ListingStatus listingStatus) {
+		this.listingStatus = listingStatus;
 	}
 
 	public long getListingPrice() {
@@ -140,12 +140,12 @@ public class Listing implements Serializable {
 		this.listingPrice = listingPrice;
 	}
 
-	public UserProfile getUserProfile() {
-		return this.userProfile;
+	public UserProfile getPoster() {
+		return this.poster;
 	}
 
-	public void setUserProfile(UserProfile userProfile) {
-		this.userProfile = userProfile;
+	public void setPoster(UserProfile userProfile) {
+		this.poster = userProfile;
 	}
 
 	public List<UserSavedListing> getUserSavedListings() {

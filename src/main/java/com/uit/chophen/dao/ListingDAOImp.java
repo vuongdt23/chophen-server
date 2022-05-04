@@ -1,5 +1,7 @@
 package com.uit.chophen.dao;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 
 import org.hibernate.Session;
@@ -8,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.uit.chophen.entities.Listing;
+import com.uit.chophen.entities.UserProfile;
 
 @Repository
 public class ListingDAOImp implements ListingDAO {
@@ -35,6 +38,18 @@ public class ListingDAOImp implements ListingDAO {
 		Listing listing = session.get(Listing.class, listingId);
 		
 		return listing;
+	}
+
+
+	@Override
+	public List<Listing> getListingByUser(int userId) {
+		Session session = entityManager.unwrap(Session.class);
+		UserProfile user = session.get(UserProfile.class, userId);
+		
+		String query = "from Listing l where l.userProfile = :user";
+		List<Listing> listings = session.createQuery(query).setParameter("user", user).getResultList();
+		
+		return listings;
 	}
 
 }

@@ -46,7 +46,7 @@ public class ListingServiceImp implements ListingService {
 		Listing listing = new Listing();
 		
 		
-		listing.setUserProfile(creator);
+		listing.setPoster(creator);
 		listing.setListingImage(listingImgLink);
 		listing.setListingAddress(listingAdress);
 		listing.setListingBody(listingBody);
@@ -71,7 +71,7 @@ public class ListingServiceImp implements ListingService {
 		String pattern = "dd-MM-yyyy HH:mm:ss";
 		DateFormat df = new SimpleDateFormat(pattern);
 		Bucket storageBucket = StorageClient.getInstance().bucket();
-		String fileName = "/postImages/" +  RandomStringUtils.randomAlphanumeric(10) + "PostImg " + getDateTimeString();
+		String fileName = "postImages/" +  RandomStringUtils.randomAlphanumeric(10) + "PostImg " + getDateTimeString();
 		Blob blob = storageBucket.create(fileName, img.getBytes(), "image/jpeg");
 		return blob.getMediaLink();
 	}
@@ -85,8 +85,13 @@ public class ListingServiceImp implements ListingService {
 	@Override
 	@Transactional
 	public Listing getListingById(int listingId) {
-		// TODO Auto-generated method stub
 		return listingDAO.getListingById(listingId);
+	}
+
+	@Override
+	@Transactional
+	public List<Listing> getListingsByUserId(int userId) {
+		return listingDAO.getListingByUser(userId);
 	}
 
 }

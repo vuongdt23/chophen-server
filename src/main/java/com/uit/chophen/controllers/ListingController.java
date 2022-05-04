@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.uit.chophen.entities.Listing;
 import com.uit.chophen.httpdomains.request.CreateListingRequestBody;
+import com.uit.chophen.httpdomains.response.MyListingsResponseBody;
 import com.uit.chophen.services.ListingService;
 import com.uit.chophen.utils.JWTTokenProvider;
 
@@ -60,5 +61,18 @@ public class ListingController {
 		
 		return new ResponseEntity<Listing>(listing, HttpStatus.OK);
 	}
+	
+	
+	@GetMapping("/myListings")
+	public ResponseEntity<MyListingsResponseBody> getUserOwnedListings(@RequestHeader(name = "Authorization") String jwtToken){
+		MyListingsResponseBody listingsResponseBody = new MyListingsResponseBody();
+		int userId = Integer.parseInt(jwtTokenProvider.getSubjectFromToken(jwtToken.substring(TOKEN_PREFIX.length())));
+
+		listingsResponseBody.setListings(listingService.getListingsByUserId(userId));
+		
+		return new ResponseEntity<MyListingsResponseBody>(listingsResponseBody, HttpStatus.OK);
+	}
+	
+	
 }
 
