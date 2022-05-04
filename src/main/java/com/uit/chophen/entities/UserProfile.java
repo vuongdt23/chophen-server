@@ -75,7 +75,7 @@ public class UserProfile implements Serializable {
 
 	// bi-directional many-to-one association to Listing
 	@JsonIgnore
-	@OneToMany(mappedBy = "userProfile")
+	@OneToMany(mappedBy = "poster")
 	private List<Listing> listings;
 
 	// bi-directional many-to-one association to UserNotification
