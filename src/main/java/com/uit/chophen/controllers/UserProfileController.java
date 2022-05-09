@@ -98,7 +98,7 @@ public class UserProfileController extends ExceptionHandling {
 	public ResponseEntity<UserProfile> updateProfilePic(@RequestHeader(name = "Authorization") String jwtToken,
 			@RequestPart("file") MultipartFile file) throws IOException {
 
-		int userId = Integer.parseInt(jwtTokenProvider.getSubjectFromToken(jwtToken.substring(TOKEN_PREFIX.length())));
+		int userId = getIntUserIdFromJwtToken(jwtToken);
 
 		return new ResponseEntity<UserProfile>(userProfileService.updateProfilePic(userId, file), HttpStatus.OK);
 
@@ -134,14 +134,27 @@ public class UserProfileController extends ExceptionHandling {
 		UserProfile user = userProfileService.findUserbyId(userId);
 		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
+	
+	@GetMapping("/getMyProfile") 
+	public ResponseEntity<UserProfile> getMyProfile(@RequestHeader(name = "Authorization") String jwtToken){
+		int userId = getIntUserIdFromJwtToken(jwtToken);
+		UserProfile userProfile = userProfileService.findUserbyId(userId);
+		return new ResponseEntity<UserProfile>(userProfile, HttpStatus.OK);
+
+		
+	}
 
 	@PostMapping("/update")
 	public ResponseEntity<UserProfile>updateProfile(@RequestBody UpdateProfileRequestBody reqBody,@RequestHeader(name = "Authorization") String jwtToken){
-		int userId = Integer.parseInt(jwtTokenProvider.getSubjectFromToken(jwtToken.substring(TOKEN_PREFIX.length())));
-		
+		int userId = getIntUserIdFromJwtToken(jwtToken);
 		UserProfile userProfile = userProfileService.updateProfile(userId, reqBody.getUserAddress(), reqBody.getUserFullName(), reqBody.getUserPhone());
 		return new ResponseEntity<UserProfile>(userProfile, HttpStatus.OK);
 		
+	}
+	
+	
+	private int getIntUserIdFromJwtToken(String jwtToken) {
+		return Integer.parseInt(jwtTokenProvider.getSubjectFromToken(jwtToken.substring(TOKEN_PREFIX.length())));
 	}
 	
 
