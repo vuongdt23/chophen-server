@@ -40,6 +40,7 @@ import com.uit.chophen.exception.EmailExistsException;
 import com.uit.chophen.exception.EmailNotFoundException;
 import com.uit.chophen.exception.ExceptionHandling;
 import com.uit.chophen.exception.UserNotFoundException;
+import com.uit.chophen.httpdomains.request.LoginRequestBody;
 import com.uit.chophen.httpdomains.request.RateUserRequestBody;
 import com.uit.chophen.httpdomains.request.SignUpRequestBody;
 import com.uit.chophen.httpdomains.request.UpdateProfileRequestBody;
@@ -70,7 +71,7 @@ public class UserProfileController extends ExceptionHandling {
 	}
 
 	@PostMapping("/login")
-	public ResponseEntity<LoginSucessResponseBody> login(@RequestBody UserProfile user) {
+	public ResponseEntity<LoginSucessResponseBody> login(@RequestBody LoginRequestBody user) {
 		authenticate(user.getAccountName(), user.getPassword());
 		UserProfile loginUser = userProfileService.findUserbyAccoutname(user.getAccountName());
 		UserPrincipal principal = new UserPrincipal(loginUser);
