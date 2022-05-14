@@ -2,6 +2,9 @@ package com.uit.chophen.entities;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.List;
 
 
@@ -39,6 +42,7 @@ public class Listing implements Serializable {
 	private long listingPrice;
 
 	//bi-directional many-to-many association to ListingCategory
+	@JsonIgnore
 	@ManyToMany
 	@JoinTable(
 		name="list_cat"

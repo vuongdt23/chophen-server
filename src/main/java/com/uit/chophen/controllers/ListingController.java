@@ -19,6 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.uit.chophen.entities.Listing;
 import com.uit.chophen.httpdomains.request.CreateListingRequestBody;
+import com.uit.chophen.httpdomains.request.GetAllListingsRequestBody;
+import com.uit.chophen.httpdomains.response.GetAllListingsResponseBody;
 import com.uit.chophen.httpdomains.response.MyListingsResponseBody;
 import com.uit.chophen.services.ListingService;
 import com.uit.chophen.utils.JWTTokenProvider;
@@ -71,6 +73,20 @@ public class ListingController {
 		listingsResponseBody.setListings(listingService.getListingsByUserId(userId));
 		
 		return new ResponseEntity<MyListingsResponseBody>(listingsResponseBody, HttpStatus.OK);
+	}
+	
+	@GetMapping("/getListings") ResponseEntity<GetAllListingsResponseBody> getAllListings(@RequestBody GetAllListingsRequestBody reqBody){
+		int[] listingCategoriesIds = reqBody.getListingCategoriesIds();
+		int pageSize = reqBody.getPageSize();
+		int pageIndex = reqBody.getPageIndex();
+		
+		GetAllListingsResponseBody resBody = new GetAllListingsResponseBody();
+		resBody.setPageIndex(pageIndex);
+		reqBody.setPageSize(pageSize);
+		resBody.setListingPage(listingService.getListingsPageByCategories(pageSize, pageIndex, listingCategoriesIds));
+		return new ResponseEntity<GetAllListingsResponseBody>(resBody, HttpStatus.OK);
+
+		
 	}
 	
 	

@@ -14,4 +14,5 @@ public interface ListingService {
 	
 	Listing getListingById(int listingId);
 	List<Listing> getListingsByUserId(int userId);
+	List<Listing> getListingsPageByCategories(int pageSize, int pageIndex, int[] listingCateogriesId);
 }
