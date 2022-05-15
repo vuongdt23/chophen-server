@@ -9,10 +9,11 @@ import com.uit.chophen.entities.Listing;
 
 public interface ListingService {
 
-	Listing createListing(String listingTitle, String listingBody, String listingAdress, long listingPrice,
+	public Listing createListing(String listingTitle, String listingBody, String listingAdress, long listingPrice,
 			MultipartFile listingImg, int[] listingCateogriesId, int creatorId) throws IOException;
 	
-	Listing getListingById(int listingId);
-	List<Listing> getListingsByUserId(int userId);
-	List<Listing> getListingsPageByCategories(int pageSize, int pageIndex, int[] listingCateogriesId);
+	public Listing getListingById(int listingId);
+	public List<Listing> getListingsByUserId(int userId);
+	public List<Listing> getListingsPageByCategories(int pageSize, int pageIndex, int[] listingCateogriesId);
+	public List<Listing> getListingsPageByString(int pageSize, int pageIndex, String searchString);
 }

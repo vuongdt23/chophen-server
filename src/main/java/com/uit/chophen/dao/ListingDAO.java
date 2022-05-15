@@ -14,4 +14,5 @@ public interface ListingDAO {
 	long getListingCountByCategories(List<ListingCategory> categories);
 	public List<Listing> getListingByCategories(int firstResult, int lastResult, List<ListingCategory> categories);
 	public List<Listing> getAllListings(int firstResult, int lastResult);
+	public List<Listing> getListingByString(int firstResult, int lastResult, String searchString);
 }

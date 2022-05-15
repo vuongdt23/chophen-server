@@ -124,5 +124,12 @@ public class ListingServiceImp implements ListingService {
 		
 	}
 
+	@Override
+	public List<Listing> getListingsPageByString(int pageSize, int pageIndex, String searchString) {
+		int firtResult = (pageIndex-1)*pageSize;
+		int lastResult = firtResult + pageSize -1;
+		return listingDAO.getListingByString(firtResult, lastResult, searchString);
+	}
+
 	
 }

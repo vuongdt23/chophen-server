@@ -111,4 +111,17 @@ public class ListingDAOImp implements ListingDAO {
 		return allListings;
 	}
 
+	@Override
+	public List<Listing> getListingByString(int firstResult, int lastResult, String searchString) {
+		Session session = entityManager.unwrap(Session.class);
+		String searchQ = "from Listing l where l.listingTitle like :searchString or l.listingBody like :searchString";
+		Query searchQuery = session.createQuery(searchQ);
+		searchQuery.setParameter("searchString", "%"+ searchString +"%" );
+		List<Listing> searchResultListings = searchQuery.getResultList();
+		return searchResultListings;
+
+	}
+	
+	
+
 }

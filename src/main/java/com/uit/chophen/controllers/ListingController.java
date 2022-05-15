@@ -20,8 +20,10 @@ import org.springframework.web.multipart.MultipartFile;
 import com.uit.chophen.entities.Listing;
 import com.uit.chophen.httpdomains.request.CreateListingRequestBody;
 import com.uit.chophen.httpdomains.request.GetAllListingsRequestBody;
+import com.uit.chophen.httpdomains.request.SearchListingRequestBody;
 import com.uit.chophen.httpdomains.response.GetAllListingsResponseBody;
 import com.uit.chophen.httpdomains.response.MyListingsResponseBody;
+import com.uit.chophen.httpdomains.response.SearchListingResponseBody;
 import com.uit.chophen.services.ListingService;
 import com.uit.chophen.utils.JWTTokenProvider;
 
@@ -75,7 +77,8 @@ public class ListingController {
 		return new ResponseEntity<MyListingsResponseBody>(listingsResponseBody, HttpStatus.OK);
 	}
 	
-	@PostMapping("/getListings") ResponseEntity<GetAllListingsResponseBody> getAllListings(@RequestBody GetAllListingsRequestBody reqBody){
+	@PostMapping("/getListings") 
+	public ResponseEntity<GetAllListingsResponseBody> getAllListings(@RequestBody GetAllListingsRequestBody reqBody){
 		int[] listingCategoriesIds = reqBody.getListingCategoriesIds();
 		int pageSize = reqBody.getPageSize();
 		int pageIndex = reqBody.getPageIndex();
@@ -88,6 +91,20 @@ public class ListingController {
 		return response;
 		
 	}
+	
+	@PostMapping("/search")
+	public ResponseEntity<SearchListingResponseBody> searchListings(@RequestBody SearchListingRequestBody reqBody){
+		String searchString = reqBody.getSearchString();
+		int pageSize = reqBody.getPageSize();
+		int pageIndex = reqBody.getPageIndex();
+		SearchListingResponseBody resBody = new SearchListingResponseBody();
+		resBody.setPageIndex(pageIndex);
+		resBody.setPageSize(pageSize);
+		resBody.setSearchString(searchString);
+		resBody.setListingPage(listingService.getListingsPageByString(pageSize, pageIndex, searchString));
+		return new ResponseEntity<SearchListingResponseBody>(resBody,HttpStatus.OK );
+	}
+	
 	
 	
 }
