@@ -42,8 +42,8 @@ public class Listing implements Serializable {
 	private long listingPrice;
 
 	//bi-directional many-to-many association to ListingCategory
-	@JsonIgnore
 	@ManyToMany
+	@JsonIgnore
 	@JoinTable(
 		name="list_cat"
 		, joinColumns={
@@ -56,16 +56,19 @@ public class Listing implements Serializable {
 	private List<ListingCategory> listingCategories;
 
 	//bi-directional many-to-one association to ListingStatus
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="listing_status")
 	private ListingStatus listingStatus;
 
 	//bi-directional many-to-one association to UserProfile
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="listing_poster")
 	private UserProfile poster;
 
 	//bi-directional many-to-one association to UserSavedListing
+	@JsonIgnore
 	@OneToMany(mappedBy="listing")
 	private List<UserSavedListing> userSavedListings;
 

@@ -75,17 +75,17 @@ public class ListingController {
 		return new ResponseEntity<MyListingsResponseBody>(listingsResponseBody, HttpStatus.OK);
 	}
 	
-	@GetMapping("/getListings") ResponseEntity<GetAllListingsResponseBody> getAllListings(@RequestBody GetAllListingsRequestBody reqBody){
+	@PostMapping("/getListings") ResponseEntity<GetAllListingsResponseBody> getAllListings(@RequestBody GetAllListingsRequestBody reqBody){
 		int[] listingCategoriesIds = reqBody.getListingCategoriesIds();
 		int pageSize = reqBody.getPageSize();
 		int pageIndex = reqBody.getPageIndex();
 		
 		GetAllListingsResponseBody resBody = new GetAllListingsResponseBody();
 		resBody.setPageIndex(pageIndex);
-		reqBody.setPageSize(pageSize);
 		resBody.setListingPage(listingService.getListingsPageByCategories(pageSize, pageIndex, listingCategoriesIds));
-		return new ResponseEntity<GetAllListingsResponseBody>(resBody, HttpStatus.OK);
-
+		resBody.setPageSize(pageSize);
+		ResponseEntity<GetAllListingsResponseBody> response = new ResponseEntity<GetAllListingsResponseBody>(resBody, HttpStatus.OK);
+		return response;
 		
 	}
 	

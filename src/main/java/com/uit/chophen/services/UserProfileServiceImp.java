@@ -97,12 +97,10 @@ public class UserProfileServiceImp implements UserProfileService, UserDetailsSer
 	}
 
 	private String getTempProfileImageUrl() {
-		// TODO Auto-generated method stub
-		return "aa";
+		return "https://firebasestorage.googleapis.com/v0/b/chophen-62aae.appspot.com/o/profileImages%2Fdefault-avatar-profile-vector-user-profile-default-avatar-profile-vector-user-profile-profile-179376714.jpg?alt=media&token=53bed25d-27d7-4240-b729-267df9a26a36";
 	}
 
 	private String encodePassword(String password) {
-		// TODO Auto-generated method stub
 		return bCryptPasswordEncoder.encode(password);
 	}
 
@@ -176,7 +174,6 @@ public class UserProfileServiceImp implements UserProfileService, UserDetailsSer
 
 	@Override
 	public UserProfile findUserbyId(int Id) {
-		// TODO Auto-generated method stub
 		return userProfileDAO.findUserProfileById(Id);
 	}
 
@@ -203,9 +200,12 @@ public class UserProfileServiceImp implements UserProfileService, UserDetailsSer
 	@Transactional
 	public UserProfile updateProfile(int id, String address, String fullName, String phone) {
 		UserProfile userProfile = userProfileDAO.findUserProfileById(id);
-		if(address != null) userProfile.setUserAddress(address);
-		if(fullName != null) userProfile.setUserFullName(fullName);
-		if(phone!= null) userProfile.setUserPhone(phone);
+		if (address != null)
+			userProfile.setUserAddress(address);
+		if (fullName != null)
+			userProfile.setUserFullName(fullName);
+		if (phone != null)
+			userProfile.setUserPhone(phone);
 		userProfileDAO.save(userProfile);
 
 		return userProfile;

@@ -97,17 +97,27 @@ public class ListingServiceImp implements ListingService {
 	@Override
 	@Transactional
 	public List<Listing> getListingsPageByCategories(int pageSize, int pageIndex, int[] listingCateogriesId) {
+		
+		if(listingCateogriesId.length==0) {
+			long totalCountAll = listingDAO.getAllListingsCount();
+			long pageCountAll = (int) Math.ceil(totalCountAll/pageSize);
+			int firtResultAll = (pageIndex-1)*pageSize;
+			int lastResultAll = firtResultAll + pageSize -1;
+			return listingDAO.getAllListings(firtResultAll, lastResultAll);
+		}
+		
 		List<ListingCategory> categories = new ArrayList<ListingCategory>();
 		for(int i: listingCateogriesId) {
 		 ListingCategory category= 	listingCategoryDAO.getListingCategoryById(i);
 		 categories.add(category);
 		}
 		
+		
 		long totalCount = listingDAO.getListingCountByCategories(categories);
 		long pageCount = (int) Math.ceil(totalCount/pageSize);
 		
 		int firtResult = (pageIndex-1)*pageSize;
-		int lastResult = pageIndex * pageSize;
+		int lastResult = firtResult + pageSize -1;
 		
 		return listingDAO.getListingByCategories(firtResult, lastResult,categories);
 		

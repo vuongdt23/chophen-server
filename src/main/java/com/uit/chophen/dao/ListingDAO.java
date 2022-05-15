@@ -10,7 +10,8 @@ public interface ListingDAO {
 	public void saves(Listing listing);
 	public Listing getListingById(int listingId);
 	public List<Listing> getListingByUser(int userId);
-	public int getAllListingsCount();
+	public long getAllListingsCount();
 	long getListingCountByCategories(List<ListingCategory> categories);
 	public List<Listing> getListingByCategories(int firstResult, int lastResult, List<ListingCategory> categories);
+	public List<Listing> getAllListings(int firstResult, int lastResult);
 }

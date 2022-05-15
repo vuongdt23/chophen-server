@@ -25,7 +25,6 @@ import io.grpc.ManagedChannelProvider.NewChannelBuilderResult;
 
 @RestController
 @RequestMapping(value = "ratings")
-
 public class UserRatingController {
 	private JWTTokenProvider jwtTokenProvider;
 	private UserRatingService userRatingService;
@@ -71,5 +70,8 @@ public class UserRatingController {
 
 	}
 	
-	
+	@GetMapping("/getUserRatingCounts/{userId}")  
+	public int getUserRatingCounts(@PathVariable("userId") int userId ) {
+		return 0;
+	}
 }
