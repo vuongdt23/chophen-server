@@ -117,6 +117,8 @@ public class ListingDAOImp implements ListingDAO {
 		String searchQ = "from Listing l where l.listingTitle like :searchString or l.listingBody like :searchString";
 		Query searchQuery = session.createQuery(searchQ);
 		searchQuery.setParameter("searchString", "%"+ searchString +"%" );
+		searchQuery.setFirstResult(firstResult);
+		searchQuery.setMaxResults(lastResult);
 		List<Listing> searchResultListings = searchQuery.getResultList();
 		return searchResultListings;
 
