@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.uit.chophen.entities.Listing;
+import com.uit.chophen.entities.ListingCategory;
 
 public interface ListingService {
 
@@ -16,4 +17,5 @@ public interface ListingService {
 	public List<Listing> getListingsByUserId(int userId);
 	public List<Listing> getListingsPageByCategories(int pageSize, int pageIndex, int[] listingCateogriesId);
 	public List<Listing> getListingsPageByString(int pageSize, int pageIndex, String searchString);
+	public List<ListingCategory> getAllListingCategories();
 }

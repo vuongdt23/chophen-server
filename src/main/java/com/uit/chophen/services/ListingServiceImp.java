@@ -131,5 +131,11 @@ public class ListingServiceImp implements ListingService {
 		return listingDAO.getListingByString(firtResult, lastResult, searchString);
 	}
 
+	@Override
+	public List<ListingCategory> getAllListingCategories() {
+		// TODO Auto-generated method stub
+		return listingCategoryDAO.getAll();
+	}
+
 	
 }

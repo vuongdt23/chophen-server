@@ -1,5 +1,7 @@
 package com.uit.chophen.dao;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 
 import org.hibernate.Session;
@@ -25,6 +27,15 @@ public class ListingCategoryDAOImp implements ListingCategoryDAO{
 		Session session = entityManager.unwrap(Session.class);
 		ListingCategory listingCategory = session.find(ListingCategory.class, listingCategoryId);
 		return listingCategory;
+	}
+
+
+	@Override
+	public List<ListingCategory> getAll() {
+		Session session = entityManager.unwrap(Session.class);
+		String query = "from ListingCategory";
+		List<ListingCategory> categories = session.createQuery(query).getResultList();
+		return categories;
 	}
 
 }
