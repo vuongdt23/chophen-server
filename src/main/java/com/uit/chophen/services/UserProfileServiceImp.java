@@ -182,14 +182,14 @@ public class UserProfileServiceImp implements UserProfileService, UserDetailsSer
 	public UserProfile updateProfilePic(int id, MultipartFile file) throws IOException {
 
 		UserProfile userProfile = userProfileDAO.findUserProfileById(id);
-		String pattern = "dd-MM-yyyy HH:mm:ss";
+		String pattern = "dd-MM-yyyyHH:mm:ss";
 		DateFormat df = new SimpleDateFormat(pattern);
 		Bucket storageBucket = StorageClient.getInstance().bucket();
-		String fileName = "profileImages/" + "User" + id + "ProfilePic " + df.format(new Date());
+		String fileName = "profileImages/" + "User" + id + "ProfilePic" + df.format(new Date());
 
 		Blob blob = storageBucket.create(fileName, file.getBytes(), "image/jpeg");
 
-		String profileImgLink = blob.getMediaLink();
+		String profileImgLink = "https://storage.googleapis.com/" + blob.getBucket() +"/" + blob.getName();
 		userProfile.setUserPic(profileImgLink);
 		userProfileDAO.save(userProfile);
 		return userProfile;
