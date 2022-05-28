@@ -18,10 +18,12 @@ import com.google.cloud.storage.Bucket;
 import com.google.firebase.cloud.StorageClient;
 import com.uit.chophen.dao.ListingCategoryDAO;
 import com.uit.chophen.dao.ListingDAO;
+import com.uit.chophen.dao.SavedListingDAO;
 import com.uit.chophen.dao.UserProfileDAO;
 import com.uit.chophen.entities.Listing;
 import com.uit.chophen.entities.ListingCategory;
 import com.uit.chophen.entities.UserProfile;
+import com.uit.chophen.entities.UserSavedListing;
 
 @Service
 public class ListingServiceImp implements ListingService {
@@ -29,13 +31,15 @@ public class ListingServiceImp implements ListingService {
 	private ListingDAO listingDAO;
 	private ListingCategoryDAO listingCategoryDAO;
 	private UserProfileDAO userProfileDAO;
+	private SavedListingDAO savedListingDAO;
 
 	@Autowired
-	public ListingServiceImp(ListingDAO listingDAO, ListingCategoryDAO listingCategoryDAO, UserProfileDAO userProfileDAO) {
+	public ListingServiceImp(ListingDAO listingDAO, ListingCategoryDAO listingCategoryDAO, UserProfileDAO userProfileDAO, SavedListingDAO savedListingDAO) {
 
 		this.userProfileDAO = userProfileDAO;
 		this.listingDAO = listingDAO;
 		this.listingCategoryDAO = listingCategoryDAO;
+		this.savedListingDAO = savedListingDAO;
 	}
 
 	@Override
@@ -68,16 +72,15 @@ public class ListingServiceImp implements ListingService {
 	}
 
 	private String uploadImgAndGetLink(MultipartFile img) throws IOException {
-		String pattern = "dd-MM-yyyy HH:mm:ss";
-		DateFormat df = new SimpleDateFormat(pattern);
 		Bucket storageBucket = StorageClient.getInstance().bucket();
-		String fileName = "postImages/" +  RandomStringUtils.randomAlphanumeric(10) + "PostImg " + getDateTimeString();
+		String fileName = "postImages/" +  RandomStringUtils.randomAlphanumeric(10) + "PostImg" + getDateTimeString();
 		Blob blob = storageBucket.create(fileName, img.getBytes(), "image/jpeg");
-		return blob.getMediaLink();
+		String imgLink = "https://storage.googleapis.com/" + blob.getBucket() +"/" + blob.getName();
+		return imgLink;
 	}
 
 	private String getDateTimeString() {
-		String pattern = "dd-MM-yyyy HH:mm:ss";
+		String pattern = "dd-MM-yyyyHH:mm:ss";
 		DateFormat df = new SimpleDateFormat(pattern);
 		return df.format(new Date());
 	}
@@ -135,6 +138,28 @@ public class ListingServiceImp implements ListingService {
 	public List<ListingCategory> getAllListingCategories() {
 		// TODO Auto-generated method stub
 		return listingCategoryDAO.getAll();
+	}
+
+	@Override
+	public UserSavedListing saveListing(int userId, int listingId) {
+		UserProfile user = userProfileDAO.findUserProfileById(userId);
+		Listing listing = listingDAO.getListingById(listingId);
+		
+		UserSavedListing saved = new UserSavedListing();
+		saved.setListing(listing);
+		saved.setUserProfile(user);
+		return savedListingDAO.save(saved);
+	}
+
+	@Override
+	public boolean checkCanSave(int userId, int listingId) {
+		UserProfile user = userProfileDAO.findUserProfileById(userId);
+		Listing listing = listingDAO.getListingById(listingId);
+		
+		if (savedListingDAO.getSavedListingByUserAndListing(user, listing) == null) {
+			return true;
+		}
+		return false;
 	}
 
 	

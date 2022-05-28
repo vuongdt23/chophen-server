@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.uit.chophen.entities.Listing;
 import com.uit.chophen.entities.ListingCategory;
+import com.uit.chophen.entities.UserSavedListing;
 
 public interface ListingService {
 
@@ -18,4 +19,6 @@ public interface ListingService {
 	public List<Listing> getListingsPageByCategories(int pageSize, int pageIndex, int[] listingCateogriesId);
 	public List<Listing> getListingsPageByString(int pageSize, int pageIndex, String searchString);
 	public List<ListingCategory> getAllListingCategories();
+	public UserSavedListing saveListing(int userId, int listingId);
+	public boolean checkCanSave(int userId, int listingId);
 }

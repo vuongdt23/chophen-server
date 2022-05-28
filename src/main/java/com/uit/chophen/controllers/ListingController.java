@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.uit.chophen.entities.Listing;
+import com.uit.chophen.entities.UserSavedListing;
 import com.uit.chophen.httpdomains.request.CreateListingRequestBody;
 import com.uit.chophen.httpdomains.request.GetAllListingsRequestBody;
 import com.uit.chophen.httpdomains.request.SearchListingRequestBody;
@@ -103,6 +104,16 @@ public class ListingController {
 		resBody.setSearchString(searchString);
 		resBody.setListingPage(listingService.getListingsPageByString(pageSize, pageIndex, searchString));
 		return new ResponseEntity<SearchListingResponseBody>(resBody,HttpStatus.OK );
+	}
+	
+	@PostMapping("/save/{listingId}")
+	public ResponseEntity saveListing(@PathVariable int listingId, @RequestHeader(name = "Authorization") String jwtToken){
+		int userId = Integer.parseInt(jwtTokenProvider.getSubjectFromToken(jwtToken.substring(TOKEN_PREFIX.length())));
+		if(listingService.checkCanSave(userId, listingId)) {
+			UserSavedListing saved = listingService.saveListing(userId, listingId);
+			return new ResponseEntity<UserSavedListing> (saved, HttpStatus.OK);
+		}
+		return new ResponseEntity<String>("You already saved this listing", HttpStatus.BAD_REQUEST);
 	}
 	
 	
