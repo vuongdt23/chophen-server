@@ -175,5 +175,29 @@ public class ListingServiceImp implements ListingService {
 		}
 	}
 
+	@Override
+	@Transactional
+	public int getListingOwnerId(int listingId) {
+		Listing listing = listingDAO.getListingById(listingId);
+		return listing.getPoster().getUserId();
+	}
+
+	@Override
+	public List<ListingCategory> getListingCategoriesFromId(int[] listingCateogriesId) {
+	List<ListingCategory> listingCategories = new ArrayList<ListingCategory>();
+		
+		for(int i = 0; i< listingCateogriesId.length; i++) {
+			listingCategories.add(listingCategoryDAO.getListingCategoryById(listingCateogriesId[i]));
+		}
+		return listingCategories;
+	}
+
+	@Override
+	public Listing updateListing(Listing listing) {
+		
+		 listingDAO.saves(listing);
+		 return listing;
+	}
+
 	
 }

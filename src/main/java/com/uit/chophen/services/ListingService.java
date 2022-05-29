@@ -22,4 +22,7 @@ public interface ListingService {
 	public UserSavedListing saveListing(int userId, int listingId);
 	public boolean checkCanSave(int userId, int listingId);
 	public void unsaveListing(int userId, int listingId);
+	public int getListingOwnerId(int listingId);
+	public List<ListingCategory> getListingCategoriesFromId(int[] listingCateogriesId);
+	public Listing updateListing(Listing listing);
 }
