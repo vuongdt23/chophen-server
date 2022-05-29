@@ -36,5 +36,11 @@ public class SavedListingDAOImp implements SavedListingDAO {
 		Session session = entityManager.unwrap(Session.class);
 		session.save(userSavedListing);
 		return userSavedListing;
+	}
+
+	@Override
+	public void remove(UserSavedListing userSavedListing) {
+		Session session = entityManager.unwrap(Session.class);
+		session.delete(userSavedListing);
 	};
 }

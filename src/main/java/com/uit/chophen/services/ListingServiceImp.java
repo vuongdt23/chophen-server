@@ -141,6 +141,7 @@ public class ListingServiceImp implements ListingService {
 	}
 
 	@Override
+	@Transactional
 	public UserSavedListing saveListing(int userId, int listingId) {
 		UserProfile user = userProfileDAO.findUserProfileById(userId);
 		Listing listing = listingDAO.getListingById(listingId);
@@ -160,6 +161,18 @@ public class ListingServiceImp implements ListingService {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	@Transactional
+	public void unsaveListing(int userId, int listingId) {
+		if(!checkCanSave(userId, listingId)) {
+			UserProfile user = userProfileDAO.findUserProfileById(userId);
+			Listing listing = listingDAO.getListingById(listingId);
+			UserSavedListing saved = savedListingDAO.getSavedListingByUserAndListing(user, listing);
+			savedListingDAO.remove(saved);
+			
+		}
 	}
 
 	

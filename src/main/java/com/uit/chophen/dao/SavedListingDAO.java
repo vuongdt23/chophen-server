@@ -8,4 +8,5 @@ public interface SavedListingDAO {
 
     public UserSavedListing getSavedListingByUserAndListing(UserProfile user, Listing listing);
     public UserSavedListing save(UserSavedListing userSavedListing);
+    public void remove(UserSavedListing userSavedListing);
 }

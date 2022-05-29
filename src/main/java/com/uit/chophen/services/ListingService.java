@@ -21,4 +21,5 @@ public interface ListingService {
 	public List<ListingCategory> getAllListingCategories();
 	public UserSavedListing saveListing(int userId, int listingId);
 	public boolean checkCanSave(int userId, int listingId);
+	public void unsaveListing(int userId, int listingId);
 }

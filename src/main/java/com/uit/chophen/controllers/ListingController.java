@@ -116,6 +116,24 @@ public class ListingController {
 		return new ResponseEntity<String>("You already saved this listing", HttpStatus.BAD_REQUEST);
 	}
 	
+	@GetMapping("/canSave/{listingId}")
+	public ResponseEntity<Boolean> getCanSaveListing(@PathVariable int listingId, @RequestHeader(name = "Authorization") String jwtToken){
+		int userId = Integer.parseInt(jwtTokenProvider.getSubjectFromToken(jwtToken.substring(TOKEN_PREFIX.length())));
+		if(listingService.checkCanSave(userId, listingId)) {
+			return new ResponseEntity<Boolean> (true, HttpStatus.OK);
+		}
+		return new ResponseEntity<Boolean> (false, HttpStatus.OK);
+	}
+	
+	@PostMapping("/unsave/{listingId}")
+	public ResponseEntity unsaveListing(@PathVariable int listingId, @RequestHeader(name = "Authorization") String jwtToken){
+		int userId = Integer.parseInt(jwtTokenProvider.getSubjectFromToken(jwtToken.substring(TOKEN_PREFIX.length())));
+		if(!listingService.checkCanSave(userId, listingId)) {
+			listingService.unsaveListing(userId, listingId);
+			return new ResponseEntity<String>("Unsaved sucessfully", HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity<String>("You have not saved this listing", HttpStatus.BAD_REQUEST);
+	}
 	
 	
 }
