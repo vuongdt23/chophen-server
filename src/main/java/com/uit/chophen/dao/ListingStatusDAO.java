@@ -6,4 +6,5 @@ public interface ListingStatusDAO {
 
 	public ListingStatus save(ListingStatus status);
 	public long getCount();
+	public ListingStatus getListingStatusById(int listingStatusId);
 ;}

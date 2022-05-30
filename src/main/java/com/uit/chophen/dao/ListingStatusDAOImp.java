@@ -10,8 +10,8 @@ import org.springframework.stereotype.Repository;
 import com.uit.chophen.entities.ListingStatus;
 
 @Repository
-public class ListingStatusDAOImp implements ListingStatusDAO{
-	
+public class ListingStatusDAOImp implements ListingStatusDAO {
+
 	private EntityManager entityManager;
 
 	@Autowired
@@ -34,6 +34,11 @@ public class ListingStatusDAOImp implements ListingStatusDAO{
 		long count = (long) query.uniqueResult();
 		return count;
 	}
-	
+
+	@Override
+	public ListingStatus getListingStatusById(int listingStatusId) {
+		Session session = entityManager.unwrap(Session.class);
+		return session.get(ListingStatus.class, listingStatusId);
+	}
 
 }

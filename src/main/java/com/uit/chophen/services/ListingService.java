@@ -26,5 +26,6 @@ public interface ListingService {
 	public List<ListingCategory> getListingCategoriesFromId(int[] listingCateogriesId);
 	public Listing updateListing(Listing listing);
 	public void deleteListing(Listing listing);
+	public Listing markListingAsSold(int listingId);
 
 }

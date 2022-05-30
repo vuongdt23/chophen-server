@@ -1,5 +1,5 @@
 package com.uit.chophen.services;
-
+import static com.uit.chophen.utils.MiscConstants.*;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -18,6 +18,7 @@ import com.google.cloud.storage.Bucket;
 import com.google.firebase.cloud.StorageClient;
 import com.uit.chophen.dao.ListingCategoryDAO;
 import com.uit.chophen.dao.ListingDAO;
+import com.uit.chophen.dao.ListingStatusDAO;
 import com.uit.chophen.dao.SavedListingDAO;
 import com.uit.chophen.dao.UserProfileDAO;
 import com.uit.chophen.entities.Listing;
@@ -32,14 +33,16 @@ public class ListingServiceImp implements ListingService {
 	private ListingCategoryDAO listingCategoryDAO;
 	private UserProfileDAO userProfileDAO;
 	private SavedListingDAO savedListingDAO;
+	private ListingStatusDAO listingStatusDAO;
 
 	@Autowired
-	public ListingServiceImp(ListingDAO listingDAO, ListingCategoryDAO listingCategoryDAO, UserProfileDAO userProfileDAO, SavedListingDAO savedListingDAO) {
+	public ListingServiceImp(ListingStatusDAO listingStatusDAO, ListingDAO listingDAO, ListingCategoryDAO listingCategoryDAO, UserProfileDAO userProfileDAO, SavedListingDAO savedListingDAO) {
 
 		this.userProfileDAO = userProfileDAO;
 		this.listingDAO = listingDAO;
 		this.listingCategoryDAO = listingCategoryDAO;
 		this.savedListingDAO = savedListingDAO;
+		this.listingStatusDAO = listingStatusDAO;
 	}
 
 	@Override
@@ -57,8 +60,8 @@ public class ListingServiceImp implements ListingService {
 		listing.setListingPrice(listingPrice);
 		listing.setListingTitle(listingTitle);
 		listing.setListingTimestamp(getDateTimeString());
+		listing.setListingStatusBean(listingStatusDAO.getListingStatusById(AVAILABLE_STATUS_ID));
 		
-
 		
 		List<ListingCategory> listingCategories = new ArrayList<ListingCategory>();
 		
@@ -204,6 +207,15 @@ public class ListingServiceImp implements ListingService {
 	@Transactional
 	public void deleteListing(Listing listing) {
 		listingDAO.delete(listing);
+	}
+
+	@Override
+	@org.springframework.transaction.annotation.Transactional
+	public Listing markListingAsSold(int listingId) {
+		Listing listing = listingDAO.getListingById(listingId);
+		listing.setListingStatusBean(listingStatusDAO.getListingStatusById(SOLD_STATUS_ID));
+		listingDAO.saves(listing);
+		return listing;
 	}
 
 	

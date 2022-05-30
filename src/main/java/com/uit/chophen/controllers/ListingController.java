@@ -170,4 +170,16 @@ public class ListingController {
 		return new ResponseEntity<String>("Delete listing successfully", HttpStatus.OK);
  
 	}
+	
+	@PostMapping("/markAsSold/{listingId")
+	public ResponseEntity<String> markAsSold(@PathVariable int listingId,
+			@RequestHeader(name = "Authorization") String jwtToken){
+		int userId = Integer.parseInt(jwtTokenProvider.getSubjectFromToken(jwtToken.substring(TOKEN_PREFIX.length())));
+		if (listingService.getListingOwnerId(listingId) != userId) {
+			return new ResponseEntity<String>("You are not allowed to edit this content", HttpStatus.FORBIDDEN);
+		}
+		listingService.markListingAsSold(listingId);
+		return new ResponseEntity<String>("Mark listing as sold sucessfully", HttpStatus.OK);
+
+	}
 }
