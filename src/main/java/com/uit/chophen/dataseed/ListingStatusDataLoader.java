@@ -17,7 +17,7 @@ public class ListingStatusDataLoader implements CommandLineRunner {
 		this.listingStatusDAO = listingStatusDAO;
 	}
 
-	@Transactional
+	
 	private void loadStatusData() {
 		ListingStatus available = new ListingStatus();
 		ListingStatus sold = new ListingStatus();
@@ -33,6 +33,7 @@ public class ListingStatusDataLoader implements CommandLineRunner {
 	}
 
 	@Override
+	@Transactional
 	public void run(String... args) throws Exception {
 		if (listingStatusDAO.getCount() == 0) {
 			loadStatusData();

@@ -43,7 +43,7 @@ public class ListingCategoryDAOImp implements ListingCategoryDAO{
 	@Override
 	public ListingCategory save(ListingCategory listingCategory) {
 		Session session = entityManager.unwrap(Session.class);
-		session.saveOrUpdate(listingCategory);
+		session.save(listingCategory);
 		return listingCategory;
 	}
 

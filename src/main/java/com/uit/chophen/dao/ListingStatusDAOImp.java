@@ -22,7 +22,7 @@ public class ListingStatusDAOImp implements ListingStatusDAO {
 	@Override
 	public ListingStatus save(ListingStatus status) {
 		Session session = entityManager.unwrap(Session.class);
-		session.saveOrUpdate(status);
+		session.save(status);
 		return status;
 	}
 
