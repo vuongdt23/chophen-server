@@ -171,7 +171,7 @@ public class ListingController {
  
 	}
 	
-	@PostMapping("/markAsSold/{listingId")
+	@PostMapping("/markAsSold/{listingId}")
 	public ResponseEntity<String> markAsSold(@PathVariable int listingId,
 			@RequestHeader(name = "Authorization") String jwtToken){
 		int userId = Integer.parseInt(jwtTokenProvider.getSubjectFromToken(jwtToken.substring(TOKEN_PREFIX.length())));
