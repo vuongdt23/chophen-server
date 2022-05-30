@@ -123,6 +123,12 @@ public class ListingDAOImp implements ListingDAO {
 		return searchResultListings;
 
 	}
+
+	@Override
+	public void delete(Listing listing) {
+		Session session = entityManager.unwrap(Session.class);
+		session.delete(listing);
+	}
 	
 	
 

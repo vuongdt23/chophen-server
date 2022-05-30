@@ -8,4 +8,6 @@ public interface ListingCategoryDAO {
 
 	public ListingCategory getListingCategoryById(int listingCategoryId);
 	public List<ListingCategory> getAll();
+	public ListingCategory save(ListingCategory listingCategory);
+	public long getCount();
 }

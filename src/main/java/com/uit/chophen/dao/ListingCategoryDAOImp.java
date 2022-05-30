@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -36,6 +37,24 @@ public class ListingCategoryDAOImp implements ListingCategoryDAO{
 		String query = "from ListingCategory";
 		List<ListingCategory> categories = session.createQuery(query).getResultList();
 		return categories;
+	}
+
+
+	@Override
+	public ListingCategory save(ListingCategory listingCategory) {
+		Session session = entityManager.unwrap(Session.class);
+		session.saveOrUpdate(listingCategory);
+		return listingCategory;
+	}
+
+
+	@Override
+	public long getCount() {
+		Session session = entityManager.unwrap(Session.class);
+		String countQ = "Select count(*) from ListingCategory l";
+		Query query = session.createQuery(countQ);
+		long count = (long) query.uniqueResult();
+		return count;
 	}
 
 }

@@ -25,4 +25,6 @@ public interface ListingService {
 	public int getListingOwnerId(int listingId);
 	public List<ListingCategory> getListingCategoriesFromId(int[] listingCateogriesId);
 	public Listing updateListing(Listing listing);
+	public void deleteListing(Listing listing);
+
 }

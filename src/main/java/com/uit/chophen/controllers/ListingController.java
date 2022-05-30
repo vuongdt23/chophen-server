@@ -141,7 +141,7 @@ public class ListingController {
 		return new ResponseEntity<String>("You have not saved this listing", HttpStatus.BAD_REQUEST);
 	}
 
-	@PostMapping("update/{listingId")
+	@PostMapping("update/{listingId}")
 	public ResponseEntity updateListing(@PathVariable int listingId,
 			@RequestHeader(name = "Authorization") String jwtToken, @RequestBody UpdateListingRequestBody reqBody) {
 		int userId = Integer.parseInt(jwtTokenProvider.getSubjectFromToken(jwtToken.substring(TOKEN_PREFIX.length())));
@@ -156,5 +156,18 @@ public class ListingController {
 		listing.setListingTitle(reqBody.getListingTitle());
 
 		return new ResponseEntity<Listing>(listingService.updateListing(listing), HttpStatus.OK);
+	}
+
+	@PostMapping("delete/{listingId}")
+	public ResponseEntity<String> deleteListing(@PathVariable int listingId,
+			@RequestHeader(name = "Authorization") String jwtToken) {
+		int userId = Integer.parseInt(jwtTokenProvider.getSubjectFromToken(jwtToken.substring(TOKEN_PREFIX.length())));
+		if (listingService.getListingOwnerId(listingId) != userId) {
+			return new ResponseEntity<String>("You are not allowed to delete this content", HttpStatus.FORBIDDEN);
+		}
+		Listing listing = listingService.getListingById(listingId);
+		listingService.deleteListing(listing);
+		return new ResponseEntity<String>("Delete listing successfully", HttpStatus.OK);
+ 
 	}
 }

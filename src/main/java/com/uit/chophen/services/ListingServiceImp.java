@@ -193,10 +193,17 @@ public class ListingServiceImp implements ListingService {
 	}
 
 	@Override
+	@Transactional
 	public Listing updateListing(Listing listing) {
 		
 		 listingDAO.saves(listing);
 		 return listing;
+	}
+
+	@Override
+	@Transactional
+	public void deleteListing(Listing listing) {
+		listingDAO.delete(listing);
 	}
 
 	
