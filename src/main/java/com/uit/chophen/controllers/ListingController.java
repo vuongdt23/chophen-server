@@ -79,6 +79,17 @@ public class ListingController {
 
 		return new ResponseEntity<MyListingsResponseBody>(listingsResponseBody, HttpStatus.OK);
 	}
+	
+	@GetMapping("/mySavedListings")
+	public ResponseEntity<MyListingsResponseBody> getUserSavedListings(
+			@RequestHeader(name = "Authorization") String jwtToken) {
+		MyListingsResponseBody listingsResponseBody = new MyListingsResponseBody();
+		int userId = Integer.parseInt(jwtTokenProvider.getSubjectFromToken(jwtToken.substring(TOKEN_PREFIX.length())));
+
+		listingsResponseBody.setListings(listingService.getSavedListingByUser(userId));
+
+		return new ResponseEntity<MyListingsResponseBody>(listingsResponseBody, HttpStatus.OK);
+	}
 
 	@PostMapping("/getListings")
 	public ResponseEntity<GetAllListingsResponseBody> getAllListings(@RequestBody GetAllListingsRequestBody reqBody) {

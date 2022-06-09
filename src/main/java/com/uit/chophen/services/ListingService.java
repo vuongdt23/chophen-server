@@ -27,5 +27,6 @@ public interface ListingService {
 	public Listing updateListing(Listing listing);
 	public void deleteListing(Listing listing);
 	public Listing markListingAsSold(int listingId);
+	public List<Listing> getSavedListingByUser(int userId);
 
 }

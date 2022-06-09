@@ -1,5 +1,7 @@
 package com.uit.chophen.dao;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 
 import org.hibernate.Session;
@@ -27,7 +29,7 @@ public class SavedListingDAOImp implements SavedListingDAO {
 		Session session = entityManager.unwrap(Session.class);
 		String query = "from UserSavedListing u where u.listing = :listing and u.userProfile = :user";
 
-		UserSavedListing result = (UserSavedListing) session.createQuery(query).setParameter("listing", listing).setParameter("user", user).getResultStream().findFirst().orElse(null);;
+		UserSavedListing result = (UserSavedListing) session.createQuery(query).setParameter("listing", listing).setParameter("user", user).getResultStream().findFirst().orElse(null);
 		return result;
 	}
 
@@ -42,5 +44,14 @@ public class SavedListingDAOImp implements SavedListingDAO {
 	public void remove(UserSavedListing userSavedListing) {
 		Session session = entityManager.unwrap(Session.class);
 		session.delete(userSavedListing);
+	}
+
+	@Override
+	public List<Listing> getSaveListingsByUser(UserProfile user) {
+		Session session = entityManager.unwrap(Session.class);
+
+		String query = "select u.listing from UserSavedListing u where u.userProfile = :user";
+		List<Listing> result = session.createQuery(query).setParameter("user", user).getResultList();
+		return result;
 	};
 }

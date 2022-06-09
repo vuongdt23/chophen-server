@@ -218,5 +218,11 @@ public class ListingServiceImp implements ListingService {
 		return listing;
 	}
 
+	@Override
+	public List<Listing> getSavedListingByUser(int userId) {
+		UserProfile user = userProfileDAO.findUserProfileById(userId);
+		return savedListingDAO.getSaveListingsByUser(user);
+	}
+
 	
 }
