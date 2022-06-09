@@ -33,16 +33,26 @@ public class ListingCategoryDataLoader implements CommandLineRunner {
 		ListingCategory musicalInstruments =  new ListingCategory();
 		ListingCategory other =  new ListingCategory();
 		
-		clothing.setListingCategoryName("clothing");
-		books.setListingCategoryName("books");
-		electronics.setListingCategoryName("electronics");
-		furniture.setListingCategoryName("furniture");
-		jewelry.setListingCategoryName("jewelry");
-		sporting.setListingCategoryName("sporting");
-		watches.setListingCategoryName("watches");
-		tools.setListingCategoryName("tools");
-		musicalInstruments.setListingCategoryName("musicalInstruments");
-		other.setListingCategoryName("other");
+		clothing.setListingCategoryName("Clothing");
+		clothing.setListingCategoryIcon("https://storage.googleapis.com/chophen-62aae.appspot.com/catImg/clothing.png");
+		books.setListingCategoryName("Books");
+		books.setListingCategoryIcon("https://storage.googleapis.com/chophen-62aae.appspot.com/catImg/book.png");
+		electronics.setListingCategoryName("Electronics");
+		electronics.setListingCategoryIcon("https://storage.googleapis.com/chophen-62aae.appspot.com/catImg/electronic-device.png");
+		furniture.setListingCategoryName("Furniture");
+		furniture.setListingCategoryIcon("https://storage.googleapis.com/chophen-62aae.appspot.com/catImg/furnitures.png");
+		jewelry.setListingCategoryName("Jewelry");
+		jewelry.setListingCategoryIcon("https://storage.googleapis.com/chophen-62aae.appspot.com/catImg/jewelry.png");
+		sporting.setListingCategoryName("Sporting");
+		sporting.setListingCategoryIcon("https://storage.googleapis.com/chophen-62aae.appspot.com/catImg/sports.png");
+		watches.setListingCategoryName("Watches");
+		watches.setListingCategoryIcon("https://storage.googleapis.com/chophen-62aae.appspot.com/catImg/watch.png");
+		tools.setListingCategoryName("Tools");
+		tools.setListingCategoryIcon("https://storage.googleapis.com/chophen-62aae.appspot.com/catImg/tool-box.png");
+		musicalInstruments.setListingCategoryName("Musical Instruments");
+		musicalInstruments.setListingCategoryIcon("https://storage.googleapis.com/chophen-62aae.appspot.com/catImg/music-instrument.png");
+		other.setListingCategoryName("Other");
+		other.setListingCategoryIcon("https://storage.googleapis.com/chophen-62aae.appspot.com/catImg/miscellaneous.png");
 
 		listingCategoryDAO.save(clothing);
 		listingCategoryDAO.save(books);

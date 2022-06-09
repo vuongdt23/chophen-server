@@ -28,6 +28,9 @@ public class ListingCategory implements Serializable {
 
 	@Column(name="listing_category_name")
 	private String listingCategoryName;
+	
+	@Column(name="listing_category_icon")
+	private String listingCategoryIcon;
 
 	//bi-directional many-to-many association to Listing
 	@JsonIgnore
@@ -67,6 +70,14 @@ public class ListingCategory implements Serializable {
 
 	public void setListings(List<Listing> listings) {
 		this.listings = listings;
+	}
+
+	public String getListingCategoryIcon() {
+		return listingCategoryIcon;
+	}
+
+	public void setListingCategoryIcon(String listingCategoryIcon) {
+		this.listingCategoryIcon = listingCategoryIcon;
 	}
 
 }

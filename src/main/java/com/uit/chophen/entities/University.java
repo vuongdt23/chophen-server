@@ -25,6 +25,9 @@ public class University implements Serializable {
     private String universityAbbName;
     @Column(name = "university_description")
     private String universityDescription;
+    
+    @Column(name = "university_email_suffix")
+    private String universityEmailSuffix;
 
     @OneToMany(mappedBy="userUniversity")
 	private List<UserProfile> users;
@@ -68,5 +71,13 @@ public class University implements Serializable {
     public void setUsers(List<UserProfile> users) {
         this.users = users;
     }
+
+	public String getUniversityEmailSuffix() {
+		return universityEmailSuffix;
+	}
+
+	public void setUniversityEmailSuffix(String universityEmailSuffix) {
+		this.universityEmailSuffix = universityEmailSuffix;
+	}
     
 }

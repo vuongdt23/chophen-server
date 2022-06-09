@@ -31,20 +31,28 @@ public class UniversityDataLoader implements CommandLineRunner {
 
 		uit.setUniversityAbbName("UIT");
 		uit.setUniversityName("Trường Đại học Công Nghệ Thông Tin - Đại học Quốc Gia TP.HCM");
+		uit.setUniversityEmailSuffix("@gm.uit.edu.vn");
 		ussh.setUniversityAbbName("USSH");
 		ussh.setUniversityName("Trường Đại học Khoa học Xã hội và Nhân văn - Đại học Quốc Gia TP.HCM");
+		ussh.setUniversityEmailSuffix("@hcmussh.edu.vn");
 		hcmus.setUniversityAbbName("HCMUS");
 		hcmus.setUniversityName("Trường Đại học Khoa học Tự nhiên - Đại học Quốc Gia TP.HCM");
+		hcmus.setUniversityEmailSuffix("@student.hcmus.edu.vn");
 		hcmut.setUniversityAbbName("HCMUT");
 		hcmut.setUniversityName("TTrường Đại học Bách Khoa - Đại học Quốc Gia TP.HCM");
+		hcmut.setUniversityEmailSuffix("@hcmut.edu.vn");
 		iu.setUniversityAbbName("IU");
 		iu.setUniversityName("Trường Đại học Quốc tế - Đại học Quốc Gia TP.HCM");
+		iu.setUniversityEmailSuffix("@hcmiu.edu.vn");
 		nlu.setUniversityAbbName("NLU");
 		nlu.setUniversityName("Trường Đại học Nông Lâm");
+		nlu.setUniversityEmailSuffix( "@hcmuaf.edu.vn");
 		uel.setUniversityAbbName("UEL");
 		uel.setUniversityName("Trường Đại học Kinh tế - Luật - Đại học Quốc Gia TP.HCM");
+		uel.setUniversityEmailSuffix("@st.uel.edu.vn");
 		ute.setUniversityAbbName("UTE");
 		ute.setUniversityName("Trường Đại học Sư phạm Kỹ thuật TP.HCM");
+		ute.setUniversityEmailSuffix("@student.hcmute.edu.vn");
 
 		universityDAO.save(uit);
 		universityDAO.save(ussh);
