@@ -64,4 +64,6 @@ public class UserProfileDAOImp implements UserProfileDAO {
 		return userProfile;
 	}
 
+	
+
 }

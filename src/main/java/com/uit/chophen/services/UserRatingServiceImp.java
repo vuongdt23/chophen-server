@@ -46,4 +46,18 @@ public class UserRatingServiceImp implements UserRatingService {
 		
 	}
 
+	@Override
+	@Transactional
+	public long getUserLikeCount(int id) {
+		
+		return userRatingDAO.getUserLikeCount(id);
+	}
+
+	@Override
+	@Transactional
+	public long getUserDisLikeCount(int id) {
+		// TODO Auto-generated method stub
+		return userRatingDAO.getUserDisLikeCount(id);
+	}
+
 }

@@ -44,6 +44,7 @@ import com.uit.chophen.httpdomains.request.LoginRequestBody;
 import com.uit.chophen.httpdomains.request.RateUserRequestBody;
 import com.uit.chophen.httpdomains.request.SignUpRequestBody;
 import com.uit.chophen.httpdomains.request.UpdateProfileRequestBody;
+import com.uit.chophen.httpdomains.response.GetProfileResponseBody;
 import com.uit.chophen.httpdomains.response.LoginSucessResponseBody;
 import com.uit.chophen.security.UserPrincipal;
 import com.uit.chophen.services.UserProfileService;
@@ -130,9 +131,11 @@ public class UserProfileController extends ExceptionHandling {
 		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
 	@GetMapping("/findById/{userId}")
-	public ResponseEntity<UserProfile> getUserById(@PathVariable("userId") int userId) {
+	public ResponseEntity<GetProfileResponseBody> getUserById(@PathVariable("userId") int userId) {
 		UserProfile user = userProfileService.findUserbyId(userId);
-		return new ResponseEntity<>(user, HttpStatus.OK);
+		GetProfileResponseBody resBody = new GetProfileResponseBody(user.getUserId(), user.getUserAddress(), user.getUserEmail(),user.getUserFullName(), user.getUserPhone(),user.getUserPic(), userRatingService.getUserLikeCount(userId), userRatingService.getUserDisLikeCount(userId));
+		return new ResponseEntity<GetProfileResponseBody>(resBody, HttpStatus.OK);
+		
 	}
 	
 	@GetMapping("/getMyProfile") 

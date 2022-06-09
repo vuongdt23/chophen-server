@@ -7,4 +7,6 @@ public interface UserRatingService {
 
 	public UserRating createRating(UserProfile creator, UserProfile target, int score);
 	public boolean checkUsersRatingExists(UserProfile creator, UserProfile target);
+	public long getUserLikeCount(int id);
+    public long getUserDisLikeCount(int id);
 }

@@ -12,4 +12,5 @@ public interface UserProfileDAO {
 	public List<UserProfile> findAll();
 	public void save (UserProfile userProfile); 
 	public UserProfile findUserProfileByEmail(String email);
+	
 }

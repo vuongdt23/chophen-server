@@ -10,4 +10,6 @@ public interface UserRatingDAO {
 	public void save(UserRating userRating);
 	
 	public UserRating getUserRatingByCreatorAndTarget(UserProfile creator, UserProfile target);
+	public long getUserLikeCount(int userId);
+	public long getUserDisLikeCount(int userId);
 }
