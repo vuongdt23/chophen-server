@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.firebase.messaging.FirebaseMessagingException;
 import com.uit.chophen.fcmdomain.FCMTokenStoreObj;
 import com.uit.chophen.httpdomains.request.RegisterFCMDeviceRequestBody;
 import com.uit.chophen.services.PushNotificationService;
@@ -36,7 +37,7 @@ public class PushNotificationController {
 
 	@PostMapping("/registerDevice")
 	public ResponseEntity<String> registerDevice(@RequestBody RegisterFCMDeviceRequestBody requestBody,
-			@RequestHeader(name = "Authorization") String jwtToken) {
+			@RequestHeader(name = "Authorization") String jwtToken) throws FirebaseMessagingException {
 		String fcmToken = requestBody.getFcmToken();
 		int userId =Integer.parseInt( jwtTokenProvider.getSubjectFromToken(jwtToken.substring(TOKEN_PREFIX.length())));
 		
@@ -55,7 +56,8 @@ public class PushNotificationController {
 	}
 	
 	@GetMapping("/test")
-	public List<FCMTokenStoreObj> test() throws InterruptedException, ExecutionException{
+	public List<FCMTokenStoreObj> test() throws InterruptedException, ExecutionException, FirebaseMessagingException{
+		pushNotificationService.sendMessageToToken("cJSJGzF8Qa6r5_kAKMicKf:APA91bE2jxvgts0RSsh44l7QrfsJJ6-xiSgbrPE8YNcShDrLNyWzZBQtD4c37S5anp1TazeL3FEKKDnz7NM_fV4pumKtD_BkkXfDR7nmLO6M_-PdLfTvimRBMjz6D0GY7sST5zbtV06F");
 		return pushNotificationService.getFCMTokensByUserId(1);
 	}
 
