@@ -3,6 +3,8 @@ package com.uit.chophen.entities;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 /**
  * The persistent class for the user_notifications database table.
@@ -35,6 +37,7 @@ public class UserNotification implements Serializable {
 	private boolean userNotificationRead;
 
 	//bi-directional many-to-one association to UserProfile
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="user_id")
 	private UserProfile userProfile;

@@ -1,8 +1,11 @@
 package com.uit.chophen.dao;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -57,6 +60,30 @@ public class NotificationDAOImp implements NotificationDAO {
 		newNotification.setUserProfile(receiveUser);
 		session.save(newNotification);
 		return newNotification;
+	}
+
+	@Override
+	public List<UserNotification> getUserNotificationByUserId(int userId) {
+		Session session = entityManager.unwrap(Session.class);		
+		String selectQ = "select un from UserNotification un join un.userProfile up where up.userId =:uId";
+		Query selectQuery = session.createQuery(selectQ, UserNotification.class);
+		selectQuery.setParameter("uId", userId);
+		List<UserNotification> notificationList = selectQuery.getResultList();
+		return notificationList;
+	}
+
+	@Override
+	public UserNotification getNotificationById(int notificationId) {
+		Session session = entityManager.unwrap(Session.class);		
+		UserNotification result = session.get(UserNotification.class, notificationId);
+		return result;
+	}
+
+	@Override
+	public UserNotification saveNotification(UserNotification userNotification) {
+		Session session = entityManager.unwrap(Session.class);		
+		session.saveOrUpdate(userNotification);
+		return userNotification;
 	}
 
 	
