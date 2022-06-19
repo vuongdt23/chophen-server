@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
+import javax.transaction.Transactional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.MulticastMessage;
+import com.uit.chophen.dao.NotificationDAO;
 import com.uit.chophen.dao.UserProfileDAO;
 import com.uit.chophen.entities.UserProfile;
 import com.uit.chophen.fcmdomain.FCMTokenStoreObj;
@@ -33,6 +36,7 @@ import com.uit.chophen.fcmdomain.FCMTokenStoreObj;
 public class PushNotificationServiceImp implements PushNotificationService {
 
 	private UserProfileDAO userProfileDAO;
+	private NotificationDAO notificationDAO;
 	private Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
 	@Override
@@ -51,8 +55,9 @@ public class PushNotificationServiceImp implements PushNotificationService {
 	}
 
 	@Autowired
-	public PushNotificationServiceImp(UserProfileDAO userProfileDAO) {
+	public PushNotificationServiceImp(UserProfileDAO userProfileDAO, NotificationDAO notificationDAO) {
 		this.userProfileDAO = userProfileDAO;
+		this.notificationDAO = notificationDAO;
 	}
 
 	@Override
@@ -110,8 +115,10 @@ public class PushNotificationServiceImp implements PushNotificationService {
 	}
 
 	@Override
+	@Transactional
 	public void sendLikeNotificationsToUser(int recieveUserId, int sendUserId) throws InterruptedException, ExecutionException, FirebaseMessagingException {
 		UserProfile creatorUser = userProfileDAO.findUserProfileById(sendUserId);
+		UserProfile receiveUser = userProfileDAO.findUserProfileById(recieveUserId);
 		List<FCMTokenStoreObj> userTokens = getFCMTokensByUserId(recieveUserId);
 		List<String> tokens = new ArrayList<String>();
 		for (int i = 0; i < userTokens.size(); i++) {
@@ -124,12 +131,16 @@ public class PushNotificationServiceImp implements PushNotificationService {
 				.build();
 		
 		FirebaseMessaging.getInstance().sendMulticast(message);
+		notificationDAO.insertDisLikeNotification(receiveUser, creatorUser);
+
 	}
 
 	@Override
+	@Transactional
 	public void sendDisLikeNotificationsToUser(int recieveUserId, int sendUserId)
 			throws InterruptedException, ExecutionException, FirebaseMessagingException {
 		UserProfile creatorUser = userProfileDAO.findUserProfileById(sendUserId);
+		UserProfile receiveUser = userProfileDAO.findUserProfileById(recieveUserId);
 		List<FCMTokenStoreObj> userTokens = getFCMTokensByUserId(recieveUserId);
 		List<String> tokens = new ArrayList<String>();
 		for (int i = 0; i < userTokens.size(); i++) {
@@ -142,13 +153,16 @@ public class PushNotificationServiceImp implements PushNotificationService {
 				.build();
 		
 		FirebaseMessaging.getInstance().sendMulticast(message);
+		notificationDAO.insertDisLikeNotification(receiveUser, creatorUser);
 		
 	}
 
 	@Override
+	@Transactional
 	public void sendNewMessageNotificationToUser(int receiveUserId, int sendUserId)
 			throws InterruptedException, ExecutionException, FirebaseMessagingException {
 		UserProfile messageSender = userProfileDAO.findUserProfileById(sendUserId);
+		UserProfile receiveUser = userProfileDAO.findUserProfileById(receiveUserId);
 		List<FCMTokenStoreObj> userTokens = getFCMTokensByUserId(receiveUserId);
 		List<String> tokens = new ArrayList<String>();
 		for (int i = 0; i < userTokens.size(); i++) {
@@ -161,6 +175,7 @@ public class PushNotificationServiceImp implements PushNotificationService {
 				.build();
 		
 		FirebaseMessaging.getInstance().sendMulticast(message);
-		
+		notificationDAO.insertDisLikeNotification(receiveUser, messageSender);
+
 	}
 }
