@@ -46,7 +46,7 @@ public class ListingDAOImp implements ListingDAO {
 		Session session = entityManager.unwrap(Session.class);
 		UserProfile user = session.get(UserProfile.class, userId);
 
-		String query = "from Listing l where l.userProfile = :user";
+		String query = "from Listing l where l.poster = :user";
 		List<Listing> listings = session.createQuery(query).setParameter("user", user).getResultList();
 
 		return listings;
