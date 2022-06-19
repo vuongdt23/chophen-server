@@ -68,4 +68,5 @@ public class PushNotificationController {
 		return new ResponseEntity<BasicStringResponseBody>(resBody, HttpStatus.OK);
 	}
 
+	
 }
