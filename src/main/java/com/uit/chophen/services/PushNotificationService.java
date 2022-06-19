@@ -12,9 +12,9 @@ public interface PushNotificationService {
 	 public void registerDevice(String fcmToken, int userId);
 	 public List<FCMTokenStoreObj> getFCMTokensByUserId(int userId) throws InterruptedException, ExecutionException;
 	 
-	 public void sendLikeNotificationsToUser(int userId) throws InterruptedException, ExecutionException, FirebaseMessagingException;
-	 public void sendDisLikeNotificationsToUser(int userId) throws InterruptedException, ExecutionException, FirebaseMessagingException;
-	 public void sendNewMessageNotificationToUser(int userId) throws InterruptedException, ExecutionException, FirebaseMessagingException;
+	 public void sendLikeNotificationsToUser(int recieveUserId, int sendUserId) throws InterruptedException, ExecutionException, FirebaseMessagingException;
+	 public void sendDisLikeNotificationsToUser( int recieveUserId, int sendUserId) throws InterruptedException, ExecutionException, FirebaseMessagingException;
+	 public void sendNewMessageNotificationToUser(int recieveUserId, int sendUserId) throws InterruptedException, ExecutionException, FirebaseMessagingException;
 
 
 }

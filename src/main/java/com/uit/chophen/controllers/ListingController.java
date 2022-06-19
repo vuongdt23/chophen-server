@@ -23,6 +23,8 @@ import com.uit.chophen.httpdomains.request.CreateListingRequestBody;
 import com.uit.chophen.httpdomains.request.GetAllListingsRequestBody;
 import com.uit.chophen.httpdomains.request.SearchListingRequestBody;
 import com.uit.chophen.httpdomains.request.UpdateListingRequestBody;
+import com.uit.chophen.httpdomains.response.BasicBooleanResponseBody;
+import com.uit.chophen.httpdomains.response.BasicStringResponseBody;
 import com.uit.chophen.httpdomains.response.GetAllListingsResponseBody;
 import com.uit.chophen.httpdomains.response.MyListingsResponseBody;
 import com.uit.chophen.httpdomains.response.SearchListingResponseBody;
@@ -79,7 +81,7 @@ public class ListingController {
 
 		return new ResponseEntity<MyListingsResponseBody>(listingsResponseBody, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/mySavedListings")
 	public ResponseEntity<MyListingsResponseBody> getUserSavedListings(
 			@RequestHeader(name = "Authorization") String jwtToken) {
@@ -121,43 +123,55 @@ public class ListingController {
 	}
 
 	@PostMapping("/save/{listingId}")
-	public ResponseEntity saveListing(@PathVariable int listingId,
+	public ResponseEntity<BasicStringResponseBody> saveListing(@PathVariable int listingId,
 			@RequestHeader(name = "Authorization") String jwtToken) {
 		int userId = Integer.parseInt(jwtTokenProvider.getSubjectFromToken(jwtToken.substring(TOKEN_PREFIX.length())));
+		BasicStringResponseBody resBody = new BasicStringResponseBody();
 		if (listingService.checkCanSave(userId, listingId)) {
 			UserSavedListing saved = listingService.saveListing(userId, listingId);
-			return new ResponseEntity<UserSavedListing>(saved, HttpStatus.OK);
+			resBody.setMessage("Save Listing sucessfully");
+			return new ResponseEntity<BasicStringResponseBody>(resBody, HttpStatus.OK);
 		}
-		return new ResponseEntity<String>("You already saved this listing", HttpStatus.BAD_REQUEST);
+		resBody.setMessage("You already saved this listing");
+		return new ResponseEntity<BasicStringResponseBody>(resBody, HttpStatus.BAD_REQUEST);
 	}
 
 	@GetMapping("/canSave/{listingId}")
-	public ResponseEntity<Boolean> getCanSaveListing(@PathVariable int listingId,
+	public ResponseEntity<BasicBooleanResponseBody> getCanSaveListing(@PathVariable int listingId,
 			@RequestHeader(name = "Authorization") String jwtToken) {
 		int userId = Integer.parseInt(jwtTokenProvider.getSubjectFromToken(jwtToken.substring(TOKEN_PREFIX.length())));
+		BasicBooleanResponseBody resBody = new BasicBooleanResponseBody();
 		if (listingService.checkCanSave(userId, listingId)) {
-			return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+			resBody.setValue(true);
+			return new ResponseEntity<BasicBooleanResponseBody>(resBody, HttpStatus.OK);
 		}
-		return new ResponseEntity<Boolean>(false, HttpStatus.OK);
+		resBody.setValue(false);
+		return new ResponseEntity<BasicBooleanResponseBody>(resBody, HttpStatus.OK);
 	}
 
 	@PostMapping("/unsave/{listingId}")
-	public ResponseEntity unsaveListing(@PathVariable int listingId,
+	public ResponseEntity<BasicStringResponseBody> unsaveListing(@PathVariable int listingId,
 			@RequestHeader(name = "Authorization") String jwtToken) {
 		int userId = Integer.parseInt(jwtTokenProvider.getSubjectFromToken(jwtToken.substring(TOKEN_PREFIX.length())));
+		BasicStringResponseBody resBody = new BasicStringResponseBody();
 		if (!listingService.checkCanSave(userId, listingId)) {
 			listingService.unsaveListing(userId, listingId);
-			return new ResponseEntity<String>("Unsaved sucessfully", HttpStatus.BAD_REQUEST);
+			resBody.setMessage("Unsaved sucessfully");
+			return new ResponseEntity<BasicStringResponseBody>(resBody, HttpStatus.BAD_REQUEST);
 		}
-		return new ResponseEntity<String>("You have not saved this listing", HttpStatus.BAD_REQUEST);
+		resBody.setMessage("You have not saved this listing");
+		return new ResponseEntity<BasicStringResponseBody>(resBody, HttpStatus.BAD_REQUEST);
 	}
 
 	@PostMapping("update/{listingId}")
-	public ResponseEntity updateListing(@PathVariable int listingId,
+	public ResponseEntity<BasicStringResponseBody> updateListing(@PathVariable int listingId,
 			@RequestHeader(name = "Authorization") String jwtToken, @RequestBody UpdateListingRequestBody reqBody) {
 		int userId = Integer.parseInt(jwtTokenProvider.getSubjectFromToken(jwtToken.substring(TOKEN_PREFIX.length())));
+		BasicStringResponseBody resBody = new BasicStringResponseBody();
+
 		if (listingService.getListingOwnerId(listingId) != userId) {
-			return new ResponseEntity<String>("You are not allowed to update this content", HttpStatus.FORBIDDEN);
+			resBody.setMessage("You are not allowed to update this content");
+			return new ResponseEntity<BasicStringResponseBody>(resBody, HttpStatus.FORBIDDEN);
 		}
 		Listing listing = listingService.getListingById(listingId);
 		listing.setListingAddress(reqBody.getListingAddress());
@@ -165,32 +179,39 @@ public class ListingController {
 		listing.setListingPrice(reqBody.getListingPrice());
 		listing.setListingCategories(listingService.getListingCategoriesFromId(reqBody.getListingCategories()));
 		listing.setListingTitle(reqBody.getListingTitle());
-
-		return new ResponseEntity<Listing>(listingService.updateListing(listing), HttpStatus.OK);
+		listingService.updateListing(listing);
+		resBody.setMessage("Update Listing sucessfully");
+		return new ResponseEntity<BasicStringResponseBody>(resBody, HttpStatus.OK);
 	}
 
 	@PostMapping("delete/{listingId}")
-	public ResponseEntity<String> deleteListing(@PathVariable int listingId,
+	public ResponseEntity<BasicStringResponseBody> deleteListing(@PathVariable int listingId,
 			@RequestHeader(name = "Authorization") String jwtToken) {
 		int userId = Integer.parseInt(jwtTokenProvider.getSubjectFromToken(jwtToken.substring(TOKEN_PREFIX.length())));
+		BasicStringResponseBody resBody = new BasicStringResponseBody();
 		if (listingService.getListingOwnerId(listingId) != userId) {
-			return new ResponseEntity<String>("You are not allowed to delete this content", HttpStatus.FORBIDDEN);
+			resBody.setMessage("You are not allowed to delete this content");
+			return new ResponseEntity<BasicStringResponseBody>(resBody, HttpStatus.FORBIDDEN);
 		}
 		Listing listing = listingService.getListingById(listingId);
 		listingService.deleteListing(listing);
-		return new ResponseEntity<String>("Delete listing successfully", HttpStatus.OK);
- 
+		resBody.setMessage("Delete listing successfully");
+		return new ResponseEntity<BasicStringResponseBody>(resBody, HttpStatus.OK);
+
 	}
-	
+
 	@PostMapping("/markAsSold/{listingId}")
-	public ResponseEntity<String> markAsSold(@PathVariable int listingId,
-			@RequestHeader(name = "Authorization") String jwtToken){
+	public ResponseEntity<BasicStringResponseBody> markAsSold(@PathVariable int listingId,
+			@RequestHeader(name = "Authorization") String jwtToken) {
 		int userId = Integer.parseInt(jwtTokenProvider.getSubjectFromToken(jwtToken.substring(TOKEN_PREFIX.length())));
+		BasicStringResponseBody resBody = new BasicStringResponseBody();
 		if (listingService.getListingOwnerId(listingId) != userId) {
-			return new ResponseEntity<String>("You are not allowed to edit this content", HttpStatus.FORBIDDEN);
+			resBody.setMessage("You are not allowed to edit this content");
+			return new ResponseEntity<BasicStringResponseBody>(resBody, HttpStatus.FORBIDDEN);
 		}
 		listingService.markListingAsSold(listingId);
-		return new ResponseEntity<String>("Mark listing as sold sucessfully", HttpStatus.OK);
+		resBody.setMessage("Mark listing as sold sucessfully");
+		return new ResponseEntity<BasicStringResponseBody>(resBody, HttpStatus.OK);
 
 	}
 }

@@ -110,9 +110,9 @@ public class PushNotificationServiceImp implements PushNotificationService {
 	}
 
 	@Override
-	public void sendLikeNotificationsToUser(int userId) throws InterruptedException, ExecutionException, FirebaseMessagingException {
-		UserProfile creatorUser = userProfileDAO.findUserProfileById(userId);
-		List<FCMTokenStoreObj> userTokens = getFCMTokensByUserId(userId);
+	public void sendLikeNotificationsToUser(int recieveUserId, int sendUserId) throws InterruptedException, ExecutionException, FirebaseMessagingException {
+		UserProfile creatorUser = userProfileDAO.findUserProfileById(sendUserId);
+		List<FCMTokenStoreObj> userTokens = getFCMTokensByUserId(recieveUserId);
 		List<String> tokens = new ArrayList<String>();
 		for (int i = 0; i < userTokens.size(); i++) {
 			tokens.add(userTokens.get(i).getFcmToken());
@@ -127,10 +127,10 @@ public class PushNotificationServiceImp implements PushNotificationService {
 	}
 
 	@Override
-	public void sendDisLikeNotificationsToUser(int userId)
+	public void sendDisLikeNotificationsToUser(int recieveUserId, int sendUserId)
 			throws InterruptedException, ExecutionException, FirebaseMessagingException {
-		UserProfile creatorUser = userProfileDAO.findUserProfileById(userId);
-		List<FCMTokenStoreObj> userTokens = getFCMTokensByUserId(userId);
+		UserProfile creatorUser = userProfileDAO.findUserProfileById(sendUserId);
+		List<FCMTokenStoreObj> userTokens = getFCMTokensByUserId(recieveUserId);
 		List<String> tokens = new ArrayList<String>();
 		for (int i = 0; i < userTokens.size(); i++) {
 			tokens.add(userTokens.get(i).getFcmToken());
@@ -146,10 +146,10 @@ public class PushNotificationServiceImp implements PushNotificationService {
 	}
 
 	@Override
-	public void sendNewMessageNotificationToUser(int userId)
+	public void sendNewMessageNotificationToUser(int receiveUserId, int sendUserId)
 			throws InterruptedException, ExecutionException, FirebaseMessagingException {
-		UserProfile messageSender = userProfileDAO.findUserProfileById(userId);
-		List<FCMTokenStoreObj> userTokens = getFCMTokensByUserId(userId);
+		UserProfile messageSender = userProfileDAO.findUserProfileById(sendUserId);
+		List<FCMTokenStoreObj> userTokens = getFCMTokensByUserId(receiveUserId);
 		List<String> tokens = new ArrayList<String>();
 		for (int i = 0; i < userTokens.size(); i++) {
 			tokens.add(userTokens.get(i).getFcmToken());

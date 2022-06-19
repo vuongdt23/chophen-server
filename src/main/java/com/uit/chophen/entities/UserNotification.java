@@ -30,6 +30,9 @@ public class UserNotification implements Serializable {
 
 	@Column(name="user_notification_title")
 	private String userNotificationTitle;
+	
+	@Column(name="user_notification_read")
+	private boolean userNotificationRead;
 
 	//bi-directional many-to-one association to UserProfile
 	@ManyToOne
@@ -85,6 +88,14 @@ public class UserNotification implements Serializable {
 
 	public void setUserProfile(UserProfile userProfile) {
 		this.userProfile = userProfile;
+	}
+
+	public boolean isUserNotificationRead() {
+		return userNotificationRead;
+	}
+
+	public void setUserNotificationRead(boolean userNotificationRead) {
+		this.userNotificationRead = userNotificationRead;
 	}
 
 }
