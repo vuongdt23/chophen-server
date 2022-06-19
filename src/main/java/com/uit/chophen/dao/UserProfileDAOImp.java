@@ -60,7 +60,8 @@ public class UserProfileDAOImp implements UserProfileDAO {
 	public UserProfile findUserProfileById(int id) {
 		Session session = entityManager.unwrap(Session.class);
 
-		UserProfile userProfile = (UserProfile) session.createQuery("from UserProfile").getResultStream().findFirst().orElse(null);
+		UserProfile userProfile = (UserProfile) session.createQuery("from UserProfile u where userId =:uId").setParameter("uId", id).getResultStream().findFirst().orElse(null);;
+		
 		return userProfile;
 	}
 

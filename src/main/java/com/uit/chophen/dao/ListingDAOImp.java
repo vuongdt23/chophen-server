@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.uit.chophen.entities.Listing;
 import com.uit.chophen.entities.ListingCategory;
 import com.uit.chophen.entities.UserProfile;
-
+import static com.uit.chophen.utils.MiscConstants.*;
 @Repository
 public class ListingDAOImp implements ListingDAO {
 
@@ -73,8 +73,8 @@ public class ListingDAOImp implements ListingDAO {
 		}
 
 		Session session = entityManager.unwrap(Session.class);
-		String countQ = "Select count (l.id) from Listing l join l.listingCategories lc where lc.listingCategoryId in :categories";
-		Query countQuery = session.createQuery(countQ).setParameter("categories", catStrings);
+		String countQ = "Select count (l.id) from Listing l join l.listingCategories lc join l.listingStatus ls where lc.listingCategoryId in :categories and ls.listingStatusId =:lsId";
+		Query countQuery = session.createQuery(countQ).setParameter("categories", catStrings).setParameter("lsId", AVAILABLE_STATUS_ID);
 		long countResult = (long) countQuery.uniqueResult();
 		return countResult;
 
@@ -82,7 +82,7 @@ public class ListingDAOImp implements ListingDAO {
 
 	@Override
 	public List<Listing> getListingByCategories(int firstResult, int lastResult, List<ListingCategory> categories) {
-		String selectQ = "select l from Listing l join l.listingCategories lc where lc.listingCategoryId in :categories";
+		String selectQ = "select l from Listing l join l.listingCategories lc join l.listingStatus ls where lc.listingCategoryId in :categories and ls.listingStatusId =:lsId";
 		Session session = entityManager.unwrap(Session.class);
 		if (categories.size() == 0) {
 			
@@ -93,7 +93,7 @@ public class ListingDAOImp implements ListingDAO {
 		}
 
 		Query selectQuery = session.createQuery(selectQ);
-		selectQuery.setParameterList("categories", catIds.toArray());
+		selectQuery.setParameterList("categories", catIds.toArray()).setParameter("lsId", AVAILABLE_STATUS_ID);
 		selectQuery.setFirstResult(firstResult);
 		selectQuery.setMaxResults(lastResult);
 		List<Listing> listings = selectQuery.getResultList();
