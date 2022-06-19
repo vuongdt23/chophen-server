@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.uit.chophen.entities.Listing;
+import com.uit.chophen.entities.UserProfile;
 import com.uit.chophen.entities.UserSavedListing;
 import com.uit.chophen.httpdomains.request.CreateListingRequestBody;
 import com.uit.chophen.httpdomains.request.GetAllListingsRequestBody;
@@ -26,9 +27,11 @@ import com.uit.chophen.httpdomains.request.UpdateListingRequestBody;
 import com.uit.chophen.httpdomains.response.BasicBooleanResponseBody;
 import com.uit.chophen.httpdomains.response.BasicStringResponseBody;
 import com.uit.chophen.httpdomains.response.GetAllListingsResponseBody;
+import com.uit.chophen.httpdomains.response.GetProfileResponseBody;
 import com.uit.chophen.httpdomains.response.MyListingsResponseBody;
 import com.uit.chophen.httpdomains.response.SearchListingResponseBody;
 import com.uit.chophen.services.ListingService;
+import com.uit.chophen.services.UserRatingService;
 import com.uit.chophen.utils.JWTTokenProvider;
 
 @RestController
@@ -37,11 +40,13 @@ public class ListingController {
 
 	private ListingService listingService;
 	private JWTTokenProvider jwtTokenProvider;
+	private UserRatingService userRatingService;
 
 	@Autowired
-	public ListingController(ListingService listingService, JWTTokenProvider jwtTokenProvider) {
+	public ListingController(ListingService listingService, JWTTokenProvider jwtTokenProvider, UserRatingService userRatingService) {
 		this.listingService = listingService;
 		this.jwtTokenProvider = jwtTokenProvider;
+		this.userRatingService = userRatingService;
 	}
 
 	@PostMapping("/createListing")
@@ -213,5 +218,17 @@ public class ListingController {
 		resBody.setMessage("Mark listing as sold sucessfully");
 		return new ResponseEntity<BasicStringResponseBody>(resBody, HttpStatus.OK);
 
+	}
+
+	@GetMapping("/getPosterProfile/{listingId}")
+	public ResponseEntity<GetProfileResponseBody> getPosterProfile(@PathVariable int listingId,
+			@RequestHeader(name = "Authorization") String jwtToken) {
+		Listing listing = listingService.getListingById(listingId);
+		UserProfile user = listing.getPoster();
+		GetProfileResponseBody resBody = new GetProfileResponseBody(user.getUserId(), user.getUserAddress(),
+				user.getUserEmail(), user.getUserFullName(), user.getUserPhone(), user.getUserPic(),
+				userRatingService.getUserLikeCount(user.getUserId()), userRatingService.getUserDisLikeCount(user.getUserId()));
+
+		return new ResponseEntity<GetProfileResponseBody>(resBody, HttpStatus.OK);
 	}
 }
