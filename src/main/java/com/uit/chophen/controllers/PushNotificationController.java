@@ -59,7 +59,7 @@ public class PushNotificationController {
 
 	}
 	
-	@PostMapping("/sendNewMessageNotification/{userId}")
+	@PostMapping("/sendNewMessageNotification/{receiveUserId}")
 	public ResponseEntity<BasicStringResponseBody> sendNewMessageNotifications(@PathVariable int receiveUserId, @RequestHeader(name = "Authorization") String jwtToken) throws FirebaseMessagingException, InterruptedException, ExecutionException{
 		int sendUserId =Integer.parseInt( jwtTokenProvider.getSubjectFromToken(jwtToken.substring(TOKEN_PREFIX.length())));
 		BasicStringResponseBody resBody = new  BasicStringResponseBody();
