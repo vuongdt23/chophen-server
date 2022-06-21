@@ -43,7 +43,6 @@ public class Listing implements Serializable {
 
 	//bi-directional many-to-many association to ListingCategory
 	@ManyToMany
-	@JsonIgnore
 	@JoinTable(
 		name="list_cat"
 		, joinColumns={
