@@ -182,7 +182,6 @@ public class ListingController {
 		listing.setListingAddress(reqBody.getListingAddress());
 		listing.setListingBody(reqBody.getListingBody());
 		listing.setListingPrice(reqBody.getListingPrice());
-		listing.setListingCategories(listingService.getListingCategoriesFromId(reqBody.getListingCategories()));
 		listing.setListingTitle(reqBody.getListingTitle());
 		listingService.updateListing(listing);
 		resBody.setMessage("Update Listing sucessfully");
