@@ -18,9 +18,18 @@ public class GetProfileResponseBody {
 	private long likeCount;
 	
 	private long dislikeCount;
+	private String accountName;
+
+	public String getAccountName() {
+		return accountName;
+	}
+
+	public void setAccountName(String accountName) {
+		this.accountName = accountName;
+	}
 
 	public GetProfileResponseBody(int userId, String userAddress, String userEmail, String userFullName,
-			String userPhone, String userPic, long likeCount, long dislikeCount) {
+			String userPhone, String userPic, long likeCount, long dislikeCount, String accountName) {
 		super();
 		this.userId = userId;
 		this.userAddress = userAddress;
@@ -30,6 +39,7 @@ public class GetProfileResponseBody {
 		this.userPic = userPic;
 		this.likeCount = likeCount;
 		this.dislikeCount = dislikeCount;
+		this.accountName = accountName;
 	}
 
 	public int getUserId() {

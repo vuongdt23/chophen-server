@@ -135,7 +135,7 @@ public class UserProfileController extends ExceptionHandling {
 	@GetMapping("/findById/{userId}")
 	public ResponseEntity<GetProfileResponseBody> getUserById(@PathVariable("userId") int userId) {
 		UserProfile user = userProfileService.findUserbyId(userId);
-		GetProfileResponseBody resBody = new GetProfileResponseBody(user.getUserId(), user.getUserAddress(), user.getUserEmail(),user.getUserFullName(), user.getUserPhone(),user.getUserPic(), userRatingService.getUserLikeCount(userId), userRatingService.getUserDisLikeCount(userId));
+		GetProfileResponseBody resBody = new GetProfileResponseBody(user.getUserId(), user.getUserAddress(), user.getUserEmail(),user.getUserFullName(), user.getUserPhone(),user.getUserPic(), userRatingService.getUserLikeCount(userId), userRatingService.getUserDisLikeCount(userId), user.getAccountName());
 		return new ResponseEntity<GetProfileResponseBody>(resBody, HttpStatus.OK);
 		
 	}
