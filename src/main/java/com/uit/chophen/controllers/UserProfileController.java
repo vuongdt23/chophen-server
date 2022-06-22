@@ -43,7 +43,9 @@ import com.uit.chophen.exception.UserNotFoundException;
 import com.uit.chophen.httpdomains.request.LoginRequestBody;
 import com.uit.chophen.httpdomains.request.RateUserRequestBody;
 import com.uit.chophen.httpdomains.request.SignUpRequestBody;
+import com.uit.chophen.httpdomains.request.UpdatePasswordRequestBody;
 import com.uit.chophen.httpdomains.request.UpdateProfileRequestBody;
+import com.uit.chophen.httpdomains.response.BasicStringResponseBody;
 import com.uit.chophen.httpdomains.response.GetProfileResponseBody;
 import com.uit.chophen.httpdomains.response.LoginSucessResponseBody;
 import com.uit.chophen.security.UserPrincipal;
@@ -159,6 +161,27 @@ public class UserProfileController extends ExceptionHandling {
 	private int getIntUserIdFromJwtToken(String jwtToken) {
 		return Integer.parseInt(jwtTokenProvider.getSubjectFromToken(jwtToken.substring(TOKEN_PREFIX.length())));
 	}
+	@PostMapping("/updatePassword")
+	private ResponseEntity<BasicStringResponseBody> updatePassword(@RequestBody  UpdatePasswordRequestBody reqBody, @RequestHeader(name = "Authorization") String jwtToken){
+		int userId = getIntUserIdFromJwtToken(jwtToken);
+		BasicStringResponseBody responseBody = new BasicStringResponseBody();
+		UserProfile profile = userProfileService.findUserbyId(userId);
+		String currentEncryptedPassword = profile.getPassword();
+		String oldPassword = reqBody.getOldPassword();
+		String newPassword = reqBody.getNewPassword();
+		if(!userProfileService.matchPassword(oldPassword, currentEncryptedPassword))
+		{
+			responseBody.setMessage("Your old password is incorrect");
+			return new ResponseEntity<BasicStringResponseBody>(responseBody, HttpStatus.BAD_REQUEST);
+		}
+		else {
+			userProfileService.updatePassword(userId, newPassword);
+			responseBody.setMessage("Change password successfully");
+			return new ResponseEntity<BasicStringResponseBody>(responseBody, HttpStatus.OK);
+
+		}
+	}
+	
 	
 
 }

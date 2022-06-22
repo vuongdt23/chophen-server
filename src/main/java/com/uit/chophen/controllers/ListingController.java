@@ -230,4 +230,14 @@ public class ListingController {
 
 		return new ResponseEntity<GetProfileResponseBody>(resBody, HttpStatus.OK);
 	}
+	
+	
+	@GetMapping("/getListingsByUser/{userId}")
+	public ResponseEntity<MyListingsResponseBody> getListingsByUser(@PathVariable int userId) {
+		MyListingsResponseBody resBody = new MyListingsResponseBody();
+		resBody.setListings(listingService.getListingsByUserId(userId));
+		return new ResponseEntity<MyListingsResponseBody>(resBody, HttpStatus.OK);
+		
+	}
+
 }

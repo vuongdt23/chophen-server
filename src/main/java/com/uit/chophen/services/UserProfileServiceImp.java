@@ -189,7 +189,7 @@ public class UserProfileServiceImp implements UserProfileService, UserDetailsSer
 
 		Blob blob = storageBucket.create(fileName, file.getBytes(), "image/jpeg");
 
-		String profileImgLink = "https://storage.googleapis.com/" + blob.getBucket() +"/" + blob.getName();
+		String profileImgLink = "https://storage.googleapis.com/" + blob.getBucket() + "/" + blob.getName();
 		userProfile.setUserPic(profileImgLink);
 		userProfileDAO.save(userProfile);
 		return userProfile;
@@ -211,6 +211,20 @@ public class UserProfileServiceImp implements UserProfileService, UserDetailsSer
 		return userProfile;
 	}
 
+	@Override
+	@Transactional
+	public UserProfile updatePassword(int userId, String newPassword) {
+		UserProfile userProfile = userProfileDAO.findUserProfileById(userId);
+		String newEncodedPassword = bCryptPasswordEncoder.encode(newPassword);
+		userProfile.setPassword(newEncodedPassword);
+		userProfileDAO.save(userProfile);
+		return userProfile;
+	}
+	
+	@Override
+	public boolean matchPassword(String oldPassword, String encryptedCurrentPassword) {
+		return bCryptPasswordEncoder.matches(oldPassword, encryptedCurrentPassword);
 
+	}
 
 }
