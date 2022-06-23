@@ -43,5 +43,12 @@ public class UniversityDAOImp implements UniversityDAO {
 
 		return query.getResultList();
 	}
+	@Override
+	public University getById(int uniId) {
+		Session session = entityManager.unwrap(Session.class);
 
+		return session.get(University.class, uniId);
+	}
+	
+	
 }

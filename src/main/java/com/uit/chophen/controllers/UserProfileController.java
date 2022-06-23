@@ -69,7 +69,8 @@ public class UserProfileController extends ExceptionHandling {
 	public ResponseEntity<UserProfile> signUp(@RequestBody SignUpRequestBody reqBody)
 			throws UserNotFoundException, AccountExistsException, EmailExistsException {
 		UserProfile userProfile = userProfileService.signUp(reqBody.getUserAddress(), reqBody.getUserEmail(),
-				reqBody.getUserFullName(), reqBody.getUserPhone(), reqBody.getAccountName(), reqBody.getPassword());
+				reqBody.getUserFullName(), reqBody.getUserPhone(), reqBody.getAccountName(), reqBody.getPassword(),
+				reqBody.getUniversityId());
 		return new ResponseEntity<UserProfile>(userProfile, HttpStatus.OK);
 	}
 
@@ -132,57 +133,64 @@ public class UserProfileController extends ExceptionHandling {
 		UserProfile user = userProfileService.findUserbyAccoutname(username);
 		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
+
 	@GetMapping("/findById/{userId}")
 	public ResponseEntity<GetProfileResponseBody> getUserById(@PathVariable("userId") int userId) {
 		UserProfile user = userProfileService.findUserbyId(userId);
-		GetProfileResponseBody resBody = new GetProfileResponseBody(user.getUserId(), user.getUserAddress(), user.getUserEmail(),user.getUserFullName(), user.getUserPhone(),user.getUserPic(), userRatingService.getUserLikeCount(userId), userRatingService.getUserDisLikeCount(userId), user.getAccountName());
-		return new ResponseEntity<GetProfileResponseBody>(resBody, HttpStatus.OK);
-		
-	}
-	
-	@GetMapping("/getMyProfile") 
-	public ResponseEntity<GetProfileResponseBody> getMyProfile(@RequestHeader(name = "Authorization") String jwtToken){
-		int userId = getIntUserIdFromJwtToken(jwtToken);
-		UserProfile user = userProfileService.findUserbyId(userId);
-		GetProfileResponseBody resBody = new GetProfileResponseBody(user.getUserId(), user.getUserAddress(), user.getUserEmail(),user.getUserFullName(), user.getUserPhone(),user.getUserPic(), userRatingService.getUserLikeCount(userId), userRatingService.getUserDisLikeCount(userId), user.getAccountName());
+		GetProfileResponseBody resBody = new GetProfileResponseBody(user.getUserId(), user.getUserAddress(),
+				user.getUserEmail(), user.getUserFullName(), user.getUserPhone(), user.getUserPic(),
+				userRatingService.getUserLikeCount(userId), userRatingService.getUserDisLikeCount(userId),
+				user.getAccountName());
+		resBody.setUniversity(user.getUserUniversity());
 		return new ResponseEntity<GetProfileResponseBody>(resBody, HttpStatus.OK);
 
-		
+	}
+
+	@GetMapping("/getMyProfile")
+	public ResponseEntity<GetProfileResponseBody> getMyProfile(@RequestHeader(name = "Authorization") String jwtToken) {
+		int userId = getIntUserIdFromJwtToken(jwtToken);
+		UserProfile user = userProfileService.findUserbyId(userId);
+		GetProfileResponseBody resBody = new GetProfileResponseBody(user.getUserId(), user.getUserAddress(),
+				user.getUserEmail(), user.getUserFullName(), user.getUserPhone(), user.getUserPic(),
+				userRatingService.getUserLikeCount(userId), userRatingService.getUserDisLikeCount(userId),
+				user.getAccountName());
+		resBody.setUniversity(user.getUserUniversity());
+		return new ResponseEntity<GetProfileResponseBody>(resBody, HttpStatus.OK);
+
 	}
 
 	@PostMapping("/update")
-	public ResponseEntity<UserProfile>updateProfile(@RequestBody UpdateProfileRequestBody reqBody,@RequestHeader(name = "Authorization") String jwtToken){
+	public ResponseEntity<UserProfile> updateProfile(@RequestBody UpdateProfileRequestBody reqBody,
+			@RequestHeader(name = "Authorization") String jwtToken) {
 		int userId = getIntUserIdFromJwtToken(jwtToken);
-		UserProfile userProfile = userProfileService.updateProfile(userId, reqBody.getUserAddress(), reqBody.getUserFullName(), reqBody.getUserPhone());
+		UserProfile userProfile = userProfileService.updateProfile(userId, reqBody.getUserAddress(),
+				reqBody.getUserFullName(), reqBody.getUserPhone());
 		return new ResponseEntity<UserProfile>(userProfile, HttpStatus.OK);
-		
+
 	}
-	
-	
+
 	private int getIntUserIdFromJwtToken(String jwtToken) {
 		return Integer.parseInt(jwtTokenProvider.getSubjectFromToken(jwtToken.substring(TOKEN_PREFIX.length())));
 	}
+
 	@PostMapping("/updatePassword")
-	private ResponseEntity<BasicStringResponseBody> updatePassword(@RequestBody  UpdatePasswordRequestBody reqBody, @RequestHeader(name = "Authorization") String jwtToken){
+	private ResponseEntity<BasicStringResponseBody> updatePassword(@RequestBody UpdatePasswordRequestBody reqBody,
+			@RequestHeader(name = "Authorization") String jwtToken) {
 		int userId = getIntUserIdFromJwtToken(jwtToken);
 		BasicStringResponseBody responseBody = new BasicStringResponseBody();
 		UserProfile profile = userProfileService.findUserbyId(userId);
 		String currentEncryptedPassword = profile.getPassword();
 		String oldPassword = reqBody.getOldPassword();
 		String newPassword = reqBody.getNewPassword();
-		if(!userProfileService.matchPassword(oldPassword, currentEncryptedPassword))
-		{
+		if (!userProfileService.matchPassword(oldPassword, currentEncryptedPassword)) {
 			responseBody.setMessage("Your old password is incorrect");
 			return new ResponseEntity<BasicStringResponseBody>(responseBody, HttpStatus.BAD_REQUEST);
-		}
-		else {
+		} else {
 			userProfileService.updatePassword(userId, newPassword);
 			responseBody.setMessage("Change password successfully");
 			return new ResponseEntity<BasicStringResponseBody>(responseBody, HttpStatus.OK);
 
 		}
 	}
-	
-	
 
 }

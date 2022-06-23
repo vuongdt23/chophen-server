@@ -2,6 +2,8 @@ package com.uit.chophen.httpdomains.response;
 
 import javax.persistence.Column;
 
+import com.uit.chophen.entities.University;
+
 public class GetProfileResponseBody {
 	private int userId;
 
@@ -14,13 +16,23 @@ public class GetProfileResponseBody {
 	private String userPhone;
 
 	private String userPic;
-	
+
 	private long likeCount;
-	
+
 	private long dislikeCount;
 	private String accountName;
-	
+
 	private boolean canRate;
+
+	private University university;
+
+	public University getUniversity() {
+		return university;
+	}
+
+	public void setUniversity(University university) {
+		this.university = university;
+	}
 
 	public boolean isCanRate() {
 		return canRate;

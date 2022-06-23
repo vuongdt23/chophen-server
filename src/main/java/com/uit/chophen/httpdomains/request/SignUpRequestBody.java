@@ -8,6 +8,7 @@ public class SignUpRequestBody {
 	private String userPhone;
 	private String accountName;
 	private String password;
+	private int universityId;
 
 	public String getUserAddress() {
 		return userAddress;
@@ -45,4 +46,11 @@ public class SignUpRequestBody {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	public int getUniversityId() {
+		return universityId;
+	}
+	public void setUniversityId(int universityId) {
+		this.universityId = universityId;
+	}
+	
 }

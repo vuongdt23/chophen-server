@@ -29,7 +29,9 @@ import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.Bucket;
 import com.google.firebase.cloud.StorageClient;
+import com.uit.chophen.dao.UniversityDAO;
 import com.uit.chophen.dao.UserProfileDAO;
+import com.uit.chophen.entities.University;
 import com.uit.chophen.entities.UserProfile;
 import com.uit.chophen.exception.AccountExistsException;
 import com.uit.chophen.exception.EmailExistsException;
@@ -45,6 +47,7 @@ public class UserProfileServiceImp implements UserProfileService, UserDetailsSer
 	private UserProfileDAO userProfileDAO;
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 	private EmailService emailService;
+	private UniversityDAO universityDAO;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -63,20 +66,21 @@ public class UserProfileServiceImp implements UserProfileService, UserDetailsSer
 
 	@Autowired
 	public UserProfileServiceImp(UserProfileDAO userProfileDAO, BCryptPasswordEncoder bCryptPasswordEncoder,
-			EmailService emailService) {
+			EmailService emailService, UniversityDAO universityDAO) {
 		this.userProfileDAO = userProfileDAO;
 		this.bCryptPasswordEncoder = bCryptPasswordEncoder;
 		this.emailService = emailService;
+		this.universityDAO = universityDAO;
 	}
 
 	@Override
 	@Transactional
 	public UserProfile signUp(String userAddress, String userEmail, String userFullName, String userPhone,
-			String accountName, String password)
+			String accountName, String password, int universityId)
 			throws AccountExistsException, EmailExistsException, UserNotFoundException {
 
 		validateNewAccountnameAndEmail(StringUtils.EMPTY, accountName, userEmail);
-
+		University uni = universityDAO.getById(universityId);
 		UserProfile profile = new UserProfile();
 		profile.setUserId(generateUserId());
 		String encodedPassword = encodePassword(password);
@@ -90,7 +94,7 @@ public class UserProfileServiceImp implements UserProfileService, UserDetailsSer
 		profile.setRole(ROLE_USER.name());
 		profile.setAuthorities(ROLE_USER.getAuthorities());
 		profile.setUserPic(getTempProfileImageUrl());
-
+		profile.setUserUniversity(uni);
 		userProfileDAO.save(profile);
 		LOGGER.info("New user password: " + password);
 		return profile;

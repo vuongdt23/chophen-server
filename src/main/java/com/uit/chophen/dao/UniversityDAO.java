@@ -8,4 +8,5 @@ public interface UniversityDAO {
 	public University save(University uni);
 	public long getCount();
 	public List<University> getAll();
+	public University getById(int uniId);
 }

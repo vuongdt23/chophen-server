@@ -227,6 +227,7 @@ public class ListingController {
 		GetProfileResponseBody resBody = new GetProfileResponseBody(user.getUserId(), user.getUserAddress(),
 				user.getUserEmail(), user.getUserFullName(), user.getUserPhone(), user.getUserPic(),
 				userRatingService.getUserLikeCount(user.getUserId()), userRatingService.getUserDisLikeCount(user.getUserId()), user.getAccountName());
+		resBody.setUniversity(user.getUserUniversity());
 
 		return new ResponseEntity<GetProfileResponseBody>(resBody, HttpStatus.OK);
 	}

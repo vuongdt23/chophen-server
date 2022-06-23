@@ -14,7 +14,7 @@ import com.uit.chophen.exception.UserNotFoundException;
 
 public interface UserProfileService {
 
-	public UserProfile signUp(String userAddress, String userEmail, String userFullName, String userPhone, String accountName, String password) throws AccountExistsException, EmailExistsException, UserNotFoundException;
+	public UserProfile signUp(String userAddress, String userEmail, String userFullName, String userPhone, String accountName, String password, int universityId) throws AccountExistsException, EmailExistsException, UserNotFoundException;
 	
 	public UserProfile findUserbyAccoutname(String accountName);
 	public UserProfile findUserByEmail(String email);
