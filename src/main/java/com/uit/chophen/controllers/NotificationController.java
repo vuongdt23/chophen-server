@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.uit.chophen.httpdomains.response.BasicBooleanResponseBody;
 import com.uit.chophen.httpdomains.response.BasicStringResponseBody;
 import com.uit.chophen.httpdomains.response.GetNotificationsResponseBody;
 import com.uit.chophen.services.NotificationService;
@@ -64,5 +65,23 @@ public class NotificationController {
 		responseBody.setMessage("Mark Notification As Read Sucessfully");
 		return new ResponseEntity<BasicStringResponseBody>(responseBody, HttpStatus.OK);
 		
+	}
+	
+	@PostMapping("/markAllAsRead")
+	public ResponseEntity<BasicStringResponseBody> markAllAsRead(@RequestHeader(name = "Authorization") String jwtToken){
+		int userId = Integer.parseInt(jwtTokenProvider.getSubjectFromToken(jwtToken.substring(TOKEN_PREFIX.length())));
+		notificationService.setAllUserNotificationAsRead(userId);
+		BasicStringResponseBody responseBody = new BasicStringResponseBody();
+		responseBody.setMessage("Set all Notification As Read");
+		notificationService.setAllUserNotificationAsRead(userId);
+		return new ResponseEntity<BasicStringResponseBody>(responseBody, HttpStatus.OK);
+	}
+	
+	@PostMapping("/hasUnread")
+	public ResponseEntity<BasicBooleanResponseBody> hasNewNotifications(@RequestHeader(name = "Authorization") String jwtToken){
+		int userId = Integer.parseInt(jwtTokenProvider.getSubjectFromToken(jwtToken.substring(TOKEN_PREFIX.length())));
+		BasicBooleanResponseBody responseBody = new BasicBooleanResponseBody();
+		responseBody.setValue(notificationService.checkHasUnreadNotifications(userId));
+		return new ResponseEntity<BasicBooleanResponseBody>(responseBody, HttpStatus.OK);
 	}
 }

@@ -80,4 +80,19 @@ public class NotificationServiceImp implements NotificationService {
 		return userNotification.isUserNotificationRead();
 	}
 
+	@Override
+	@Transactional
+	public void setAllUserNotificationAsRead(int userId) {
+		notificationDAO.setAllUsersNotificationsAsRead(userId);		
+	}
+
+	@Override
+	public boolean checkHasUnreadNotifications(int userId) {
+		List<UserNotification> notificationList = notificationDAO.getUserNotificationByUserId(userId);
+		for(int i = 0; i < notificationList.size(); i++) {
+			if(notificationList.get(i).isUserNotificationRead()) return true;
+		}
+		return false;
+	}
+
 }

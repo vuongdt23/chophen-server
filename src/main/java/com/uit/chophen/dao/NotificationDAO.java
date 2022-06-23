@@ -13,4 +13,5 @@ public interface NotificationDAO {
 	public List<UserNotification> getUserNotificationByUserId(int userId);
 	public UserNotification getNotificationById(int notificationId);
 	public UserNotification saveNotification(UserNotification userNotification);
+	public int setAllUsersNotificationsAsRead(int userId);
 }

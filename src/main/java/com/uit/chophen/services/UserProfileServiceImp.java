@@ -226,5 +226,7 @@ public class UserProfileServiceImp implements UserProfileService, UserDetailsSer
 		return bCryptPasswordEncoder.matches(oldPassword, encryptedCurrentPassword);
 
 	}
+	
+
 
 }

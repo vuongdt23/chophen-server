@@ -13,5 +13,6 @@ public interface NotificationService {
     public boolean checkOwnership(int userId, int notificationId);
     public UserNotification setNotificationAsRead(int notificationId);
     public boolean checkIsRead(int notificationId);
-
+    public void setAllUserNotificationAsRead(int userId);
+    public boolean checkHasUnreadNotifications(int userId);
 }
