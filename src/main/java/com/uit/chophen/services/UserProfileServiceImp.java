@@ -91,6 +91,7 @@ public class UserProfileServiceImp implements UserProfileService, UserDetailsSer
 		profile.setIsActive(true);
 		profile.setIsNotLocked(true);
 		profile.setAccountName(accountName);
+		profile.setUserPhone(userPhone);
 		profile.setRole(ROLE_USER.name());
 		profile.setAuthorities(ROLE_USER.getAuthorities());
 		profile.setUserPic(getTempProfileImageUrl());
