@@ -77,7 +77,7 @@ public class NotificationController {
 		return new ResponseEntity<BasicStringResponseBody>(responseBody, HttpStatus.OK);
 	}
 	
-	@PostMapping("/hasUnread")
+	@GetMapping("/hasUnread")
 	public ResponseEntity<BasicBooleanResponseBody> hasNewNotifications(@RequestHeader(name = "Authorization") String jwtToken){
 		int userId = Integer.parseInt(jwtTokenProvider.getSubjectFromToken(jwtToken.substring(TOKEN_PREFIX.length())));
 		BasicBooleanResponseBody responseBody = new BasicBooleanResponseBody();

@@ -3,6 +3,8 @@ package com.uit.chophen.entities;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 /**
  * The persistent class for the user_ratings database table.
@@ -27,11 +29,13 @@ public class UserRating implements Serializable {
 
 	//bi-directional many-to-one association to UserProfile
 	@ManyToOne
+	@JsonIgnore
 	@JoinColumn(name="user_rating_creator")
 	private UserProfile creator;
 
 	//bi-directional many-to-one association to UserProfile
 	@ManyToOne
+	@JsonIgnore
 	@JoinColumn(name="user_rating_target")
 	private UserProfile target;
 
