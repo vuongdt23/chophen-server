@@ -108,7 +108,7 @@ public class ListingServiceImp implements ListingService {
 			long totalCountAll = listingDAO.getAllListingsCount();
 			long pageCountAll = (int) Math.ceil(totalCountAll/pageSize);
 			int firtResultAll = (pageIndex-1)*pageSize;
-			int lastResultAll = firtResultAll + pageSize -1;
+			int lastResultAll = firtResultAll + pageSize ;
 			return listingDAO.getAllListings(firtResultAll, lastResultAll);
 		}
 		
@@ -123,7 +123,7 @@ public class ListingServiceImp implements ListingService {
 		long pageCount = (int) Math.ceil(totalCount/pageSize);
 		
 		int firtResult = (pageIndex-1)*pageSize;
-		int lastResult = firtResult + pageSize -1;
+		int lastResult = firtResult + pageSize ;
 		
 		return listingDAO.getListingByCategories(firtResult, lastResult,categories);
 		
