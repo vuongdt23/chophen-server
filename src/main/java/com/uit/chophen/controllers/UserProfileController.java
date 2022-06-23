@@ -141,10 +141,11 @@ public class UserProfileController extends ExceptionHandling {
 	}
 	
 	@GetMapping("/getMyProfile") 
-	public ResponseEntity<UserProfile> getMyProfile(@RequestHeader(name = "Authorization") String jwtToken){
+	public ResponseEntity<GetProfileResponseBody> getMyProfile(@RequestHeader(name = "Authorization") String jwtToken){
 		int userId = getIntUserIdFromJwtToken(jwtToken);
-		UserProfile userProfile = userProfileService.findUserbyId(userId);
-		return new ResponseEntity<UserProfile>(userProfile, HttpStatus.OK);
+		UserProfile user = userProfileService.findUserbyId(userId);
+		GetProfileResponseBody resBody = new GetProfileResponseBody(user.getUserId(), user.getUserAddress(), user.getUserEmail(),user.getUserFullName(), user.getUserPhone(),user.getUserPic(), userRatingService.getUserLikeCount(userId), userRatingService.getUserDisLikeCount(userId), user.getAccountName());
+		return new ResponseEntity<GetProfileResponseBody>(resBody, HttpStatus.OK);
 
 		
 	}
