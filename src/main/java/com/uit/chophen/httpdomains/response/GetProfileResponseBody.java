@@ -19,6 +19,16 @@ public class GetProfileResponseBody {
 	
 	private long dislikeCount;
 	private String accountName;
+	
+	private boolean canRate;
+
+	public boolean isCanRate() {
+		return canRate;
+	}
+
+	public void setCanRate(boolean canRate) {
+		this.canRate = canRate;
+	}
 
 	public String getAccountName() {
 		return accountName;
