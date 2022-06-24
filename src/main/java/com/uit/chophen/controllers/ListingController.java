@@ -220,8 +220,7 @@ public class ListingController {
 	}
 
 	@GetMapping("/getPosterProfile/{listingId}")
-	public ResponseEntity<GetProfileResponseBody> getPosterProfile(@PathVariable int listingId,
-			@RequestHeader(name = "Authorization") String jwtToken) {
+	public ResponseEntity<GetProfileResponseBody> getPosterProfile(@PathVariable int listingId) {
 		Listing listing = listingService.getListingById(listingId);
 		UserProfile user = listing.getPoster();
 		GetProfileResponseBody resBody = new GetProfileResponseBody(user.getUserId(), user.getUserAddress(),
