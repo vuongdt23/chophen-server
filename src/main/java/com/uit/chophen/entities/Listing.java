@@ -68,7 +68,7 @@ public class Listing implements Serializable {
 
 	//bi-directional many-to-one association to UserSavedListing
 	@JsonIgnore
-	@OneToMany(mappedBy="listing")
+	@OneToMany(mappedBy="listing", cascade = CascadeType.REMOVE)
 	private List<UserSavedListing> userSavedListings;
 
 	public Listing() {
