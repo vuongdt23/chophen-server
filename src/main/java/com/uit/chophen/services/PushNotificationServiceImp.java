@@ -108,15 +108,17 @@ public class PushNotificationServiceImp implements PushNotificationService {
 		return AndroidNotification.builder().setTitle("Hồ sơ của bạn được thích").setIcon("thumb_down")
 				.setBody(creatorUser.getUserFullName() + " không thích hồ sơ của bạn").build();
 	}
-	
+
 	private AndroidNotification getAndroidNewMessageNotification(UserProfile messageSender) {
 		return AndroidNotification.builder().setTitle("Bạn có tin nhắn mới")
-				.setBody(messageSender.getUserFullName() + " đã gửi cho bạn một tin nhắn mới").setIcon("mark_chat_unread").build();
+				.setBody(messageSender.getUserFullName() + " đã gửi cho bạn một tin nhắn mới")
+				.setIcon("mark_chat_unread").build();
 	}
 
 	@Override
 	@Transactional
-	public void sendLikeNotificationsToUser(int recieveUserId, int sendUserId) throws InterruptedException, ExecutionException, FirebaseMessagingException {
+	public void sendLikeNotificationsToUser(int recieveUserId, int sendUserId)
+			throws InterruptedException, ExecutionException, FirebaseMessagingException {
 		UserProfile creatorUser = userProfileDAO.findUserProfileById(sendUserId);
 		UserProfile receiveUser = userProfileDAO.findUserProfileById(recieveUserId);
 		List<FCMTokenStoreObj> userTokens = getFCMTokensByUserId(recieveUserId);
@@ -129,7 +131,7 @@ public class PushNotificationServiceImp implements PushNotificationService {
 				.setAndroidConfig(
 						AndroidConfig.builder().setNotification(getAndroidLikeNotification(creatorUser)).build())
 				.build();
-		
+
 		FirebaseMessaging.getInstance().sendMulticast(message);
 		notificationDAO.insertDisLikeNotification(receiveUser, creatorUser);
 
@@ -151,10 +153,10 @@ public class PushNotificationServiceImp implements PushNotificationService {
 				.setAndroidConfig(
 						AndroidConfig.builder().setNotification(getAndroidDisLikeNotification(creatorUser)).build())
 				.build();
-		
+
 		FirebaseMessaging.getInstance().sendMulticast(message);
 		notificationDAO.insertDisLikeNotification(receiveUser, creatorUser);
-		
+
 	}
 
 	@Override
@@ -171,11 +173,12 @@ public class PushNotificationServiceImp implements PushNotificationService {
 
 		MulticastMessage message = MulticastMessage.builder().addAllTokens(tokens)
 				.setAndroidConfig(
-						AndroidConfig.builder().setNotification(getAndroidNewMessageNotification(messageSender)).build())
+						AndroidConfig.builder().setNotification(getAndroidNewMessageNotification(messageSender))
+								.build())
 				.build();
-		
+
 		FirebaseMessaging.getInstance().sendMulticast(message);
-		notificationDAO.insertDisLikeNotification(receiveUser, messageSender);
+		notificationDAO.insertNewMessageNotification(receiveUser, messageSender);
 
 	}
 }
