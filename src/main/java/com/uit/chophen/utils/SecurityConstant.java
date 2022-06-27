@@ -11,7 +11,7 @@ public class SecurityConstant {
     public static final String FORBIDDEN_MESSAGE = "Login required";
     public static final String ACCESS_DENIED_MESSAGE = "Insufficient permissions";
     public static final String OPTIONS_HTTP_METHOD = "OPTIONS";
-    public static final String[] PUBLIC_URLS = {"/uni/**", "/user/login","/user/home/**", "/user/signUp","/user/resetPassword/**", "/listings/getListings", "/listings/search", "/listingCategories/**", "/listings/getPosterProfile/**", };
+    public static final String[] PUBLIC_URLS = {"/uni/**", "/user/login","/user/home/**", "/user/signUp","/user/resetPassword/**", "/listings/getListings", "/listings/search", "/listingCategories/**", "/listings/getPosterProfile/**", "/listings/getListingsByUser/**"};
 
     
     //User Service 
